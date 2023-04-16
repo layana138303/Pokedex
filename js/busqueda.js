@@ -78,7 +78,7 @@ async function cargarDatosPokemon() {
                 tipo2 = pokemon.types[1].type.name;
             divPokemon.setAttribute("class", "pokemon " + id + " " + tipo1 + " " + tipo2);
             divPokemon.setAttribute("name", nombre);
-            divPokemon.innerHTML = `<img src="${pokemon.sprites.front_default} "class="mini-pokemon" name="${nombre}">` +
+            divPokemon.innerHTML = `<img src="${pokemon.sprites.front_default} "class="mini-pokemon" alt="${nombre}">` +
                                     `<p class="id-pokemon">#${("0000".slice(0, -(id.toString().length)) + id)}</p>` +
                                     `<p class="nombre-pokemon">${nombre}</p>`;
             busquedaPokedex.appendChild(divPokemon);
