@@ -1,0 +1,135 @@
+.region{
+    /* display: none; */
+    border: var(--colorBorde) var(--tamañoBorde) solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    height: 12.2%;
+    margin-left: 7%;
+    box-shadow: 2px 2px 2px 2px black;
+    transition: all 0.25s ease-in-out;
+    transform: skew(345deg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* background-color: black; */
+    background-color: #ba9467;
+}
+
+.nombre-region{
+    display: none;
+}
+
+
+[name="kanto"]{
+    background-image: url("../img/regiones/kanto.png");
+}
+
+[name="johto"]{
+    background-image: url("../img/regiones/johto.png");
+}
+
+[name="hoenn"]{
+    background-image: url("../img/regiones/hoenn.png");
+}
+
+[name="sinnoh"]{
+    background-image: url("../img/regiones/sinnoh.png");
+}
+
+[name="unova"]{
+    background-image: url("../img/regiones/unova.png");
+}
+
+[name="kalos"]{
+    background-image: url("../img/regiones/kalos.png");
+}
+
+[name="alola"]{
+    background-image: url("../img/regiones/alola.png");
+}
+
+[name="galar"]{
+    background-image: url("../img/regiones/galar.png");
+}
+
+
+
+/*############### CONTENIDO VISUAL ###############*/
+.display-contenido-regiones {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.espacio-personajes {
+    width: 25%;
+    height: 70%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+
+.imagen-personaje{
+    width: 45%;
+    height: 65%;
+ }
+
+ .protagonistas {
+    width: 100%;
+    height: 10%;
+    text-align: center;
+ }
+
+.localizaciones-region {
+    width: 25%;
+    height: 70%;
+}
+
+.lugares-region {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.lugares-region > .localizacion {
+    height: 10%;
+}
+
+.div-imagen-region {
+    width: 50%;
+    height: 70%;
+    background-size: 100% 100%;
+}
+
+.parrafo-informativo {
+    font-size: 1vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: justify;
+    border: 2px solid black;    
+    border-radius: 5px;
+    padding: 1%;
+    background-color: #f3dec3;
+}
+
+.parrafo-informativo > p {
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pokedex</title>
+
+        <link rel="icon" type="image/x-icon" href="img/general/icon.ico">
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="css/entorno.css">
+        <link rel="stylesheet" href="css/pokedex.css">
+        <link rel="stylesheet" href="css/regiones.css">
+        <link rel="stylesheet" href="css/ataques.css">
+
+        <!-- JS -->
+        <script src="js/aside.js" defer></script>
+        <script src="js/busqueda.js" defer></script>
+        <script src="js/contenidoVisual.js" defer></script>
+        <script src="js/imagenesSuperior.js" defer></script>
+
+        <!-- FONT -->
+        <link href="https://fonts.cdnfonts.com/css/pokemon-solid" rel="stylesheet">
+    </head>
+    <body>
+        <div class="general">
+            <div class="imagenes-superior">
+                <div class="imagenes-bolas" id="imagenes-bolas1">
+                    <div class="imagen-superior-bola" id="imagen1"></div>
+                    <div class="imagen-superior-bola" id="imagen2"></div>
+                    <div class="imagen-superior-bola" id="imagen3"></div>
+                    <div class="imagen-superior-bola" id="imagen4"></div>
+                </div>
+                <div class="imagen-superior" id="imagen5"></div>
+                <div class="imagenes-bolas" id="imagenes-bolas2">
+                    <div class="imagen-superior-bola" id="imagen6"></div>
+                    <div class="imagen-superior-bola" id="imagen7"></div>
+                    <div class="imagen-superior-bola" id="imagen8"></div>
+                    <div class="imagen-superior-bola" id="imagen9"></div>
+                </div>
+                <div class="imagen-superior" id="imagen10"></div>
+                <div class="imagenes-bolas" id="imagenes-bolas3">
+                    <div class="imagen-superior-bola" id="imagen11"></div>
+                    <div class="imagen-superior-bola" id="imagen12"></div>
+                    <div class="imagen-superior-bola" id="imagen13"></div>
+                    <div class="imagen-superior-bola" id="imagen14"></div>
+                </div>
+                <div class="imagen-superior" id="imagen15"></div>
+                <div class="imagenes-bolas" id="imagenes-bolas4">
+                    <div class="imagen-superior-bola" id="imagen16"></div>
+                    <div class="imagen-superior-bola" id="imagen17"></div>
+                    <div class="imagen-superior-bola" id="imagen18"></div>
+                    <div class="imagen-superior-bola" id="imagen19"></div>
+                </div>
+            </div>
+            <div class="zona-trabajo">
+                <aside class="menu-aside">
+                    <div class ="menu-botones">
+                        <ul>
+                            <li><button name="busqueda" class="boton-aside" id="pokedex" onclick="soloMostrarPokedex()">Pokedex</button></li>
+                            <li><button name="busqueda" class="boton-aside" id="regiones" onclick="soloMostrarRegiones()">Regiones</button></li>
+                            <li><button name="busqueda" class="boton-aside" id="ataques" onclick="soloMostrarAtaques()">Ataques</button></li>
+                            <li><button name="busqueda" class="boton-aside" id="tabla-tipos" onclick="soloMostrarTablaTipos()">Tabla tipos</button></li>
+                            <li><button name="juego" class="boton-aside" id="juego" onclick="juego()">Juego</button></li>
+                        </ul>
+                    </div>
+                    <div class="oak" id="oak">
+                        <img src="img/personajes/oak.png" class="imagen-oak" id="oak-clickable" onclick="soloMostrarDialogoOak()">
+                    </div>
+                </aside>
+                <div id="busqueda-total" class="busqueda-total">
+                    <div id="escondo-buscador">
+                        <div class="buscador" id="buscador">
+                            <input type="text" class="input-busqueda" id="input-busqueda" placeholder="Cargando datos...">
+                            <button class="boton-busqueda" id="boton-busqueda"> <span class="lupita">&#128269;</span></button>
+                        </div>
+                    </div>
+                    <div id="busqueda" class="busqueda">
+                        <div class="busqueda-pokedex" id="div-busqueda-pokedex">
+                        </div>
+                        <div class="busqueda-regiones" id="div-busqueda-regiones">
+                        </div>
+                        <div class="busqueda-ataques" id="div-busqueda-ataques">
+                        </div>
+                        <div class="busqueda-tabla-tipos" id="div-busqueda-tabla-tipos">
+                        </div>
+                        <div class="elemento-a-buscar" id="div-elemento-a-buscar">
+                        </div>
+                    </div>
+                </div>
+                <div id="contenido" class="contenido">
+                    <div id="no-contenido-visual-superior" class="no-contenido-visual-superior">
+                        <label id="no-contenido-visual-superior-texto" class="no-contenido-visual-superior-texto">POKEDEX</label>
+                    </div>
+                    <div id="contenido-visual" class="contenido-visual">
+                        <div class="contenido-visual-pokedex" id="div-contenido-visual-pokedex">
+                            <div class="display-contenido-pokedex" id="display-contenido-pokedex">
+                                <div class="div-moves-pokemon" id="div-moves-pokemon">
+                                </div>
+                                <div class="div-info-pokemon" id="div-info-pokemon">
+                                    <div class="div-info-concreta-pokemon" id="div-info-pokemon">
+                                        <label id="pokemon-numero-pokedex">Id pokemon: #</label>
+                                        <label id="pokemon-nombre" class="parte-izquierda">Nombre:</label>
+                                        <label id="pokemon-altura">Altura:</label>
+                                        <label id="pokemon-peso" class="parte-izquierda">Peso:</label>
+                                    </div>
+                                    <div class="div-tipos-pokemon" id="div-tipos-pokemon">
+                                        <label>Tipos</label>
+                                        <ul>
+                                            <li id="pokemon-tipo-1"></li>
+                                            <li id="pokemon-tipo-2"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="div-imagen-pokemon" id="div-imagen-pokemon">
+                                        <img class="pokemon-imagen" id="pokemon-imagen" alt="imagen-pokemon">
+                                    </div>
+                                    <!-- <button class="girar-pokemon" id="girar-pokemon"></button> -->
+                                    <div class="div-habilidades-pokemon" id="div-habilidades-pokemon">
+                                        <label>Habilidades</label>
+                                        <ul>
+                                            <li id="pokemon-habilidad-1" class="habilidad"></li>
+                                            <li id="pokemon-habilidad-2" class="habilidad"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="div-stats-pokemon" id="div-stats-pokemon">
+                                        <label id="pokemon-stats-hp">PS:</label>
+                                        <label id="pokemon-stats-ataque" class="parte-izquierda">At:</label>
+                                        <label id="pokemon-stats-defensa">Def:</label>
+                                        <label id="pokemon-stats-ataque-especial" class="parte-izquierda">At. sp:</label>
+                                        <label id="pokemon-stats-defensa-especial">Def. sp:</label>
+                                        <label id="pokemon-stats-velocidad" class="parte-izquierda">Vel:</label>
+                                    </div>
+                                </div>
+                                <div class="div-info-general-pokemon" id="div-info-general-pokemon">
+                                    <div class="div-location-pokemon" id="div-location-pokemon">
+                                        <label id="areas-localizacion-pokemon">Areas localizacion</label>
+                                    </div>
+                                    <div class="div-evolution-pokemon" id="div-evolution-pokemon">
+                                        <label id="cadena-evolutiva-pokemon">Cadena evolutiva</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contenido-visual-regiones" id="div-contenido-visual-regiones">
+                            <div class="display-contenido-regiones" id="display-contenido-regiones">
+                                <div class="espacio-personajes" id="espacio-personajes">
+                                    <label class="protagonistas" id="protagonistas">PROTAGONISTAS</label>
+                                    <img class="imagen-personaje" id="imagen-personaje1">
+                                    <img class="imagen-personaje" id="imagen-personaje2">
+                                </div>
+                                <div class="localizaciones-region" id="localizaciones-region">
+                                    <div class="lugares-region" id="lugares-region">
+                                </div>
+                                </div>
+                                <div class="div-imagen-region" id="div-imagen-region"></div>
+                                <div class="parrafo-informativo" id="parrafo-informativo"></div>
+                            </div>
+                        </div>
+                        <div class="contenido-visual-ataques" id="div-contenido-visual-ataques">
+                            <div class="display-contenido-ataques" id="display-contenido-ataques">
+                                <div class="div-info-general-move" id="div-info-general-move">
+                                    <div class="div-move-name" id="div-move-name">
+                                        <p id="move-name"></p>
+                                    </div>
+                                    <div class="div-move-type-pp" id="div-move-type-pp">
+                                        <div class="div-move-type" id="div-move-type">
+                                            <p id="move-type"></p>
+                                        </div>
+                                        <div class="div-move-pp" id="div-move-pp">
+                                            <p id="move-pp"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="div-info-concreta-move" id="div-info-concreta-move">
+                                    <div class="div-info-move" id="div-info-move">
+                                        <label id="move-info-name">Nombre:</label>
+                                        <label id="move-info-type">Tipo:</label>
+                                        <div class="categoria-movimiento" id="categoria-movimiento">
+                                            <label id="move-info-damage-class">Categoria:</label>
+                                            <img id="move-info-damage-class-img" class="move-info-damage-class-img" alt="imagen-categoria">
+                                        </div>
+                                        <label id="move-info-power">Pow:</label>
+                                        <label id="move-info-accuracy">Acc:</label>
+                                        <label id="move-info-pp">PP:</label>
+                                        <label id="move-info-priority">Prio:</label>
+                                    </div>
+                                    <div class="div-pokemon-use-move" id="div-pokemon-use-move">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contenido-visual-tabla-tipos" id="div-contenido-visual-tabla-tipos">
+                            <div class="display-contenido-tabla-tipos" id="display-contenido-tabla-tipos">
+                                <div class="div-imagen-tabla-tipos" id="div-imagen-tabla-tipos">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="no-contenido-visual-inferior" class="no-contenido-visual-inferior"></div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="parte-clara-footer">
+                    <div class="gris-footer"></div>
+                    <div class="rojo-footer"></div>
+                    <!-- <img src="img/pokeball.png" class="imagenPagina" id="imagenPagina"> -->
+                </div>
+                <div class="parte-oscura-footer">
+                    <label> © 2023-2024 Todos los derechos reservados</label>
+                </div>
+            </footer>
+        </div>
+        <div class="dialogo-oak">
+            <div id="cerrar-dialogo">
+                <button id="boton-cerrar-dialogo">X</button>
+            </div>
+            <div class="oak-contenido" id="oak-contenido">
+                <div class="oak-contenido-imagen" id="oak-contenido-imagen">
+                    <img id="oak-dentro" src="img/personajes/oak.png" alt="imagen-oak">
+                </div>
+                <div class="oak-contenido-parrafo" id="oak-contenido-parrafo">
+                    <p id="texto-dialogo-oak"></p>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </body>
+</html>

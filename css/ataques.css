@@ -1,0 +1,407 @@
+:root{
+    --colorauxiliar: white;
+}
+
+.busqueda-ataques p{
+    text-align: fit-content;
+}
+
+.div-moves-pokemon p{
+    text-align: center;
+}
+
+[class ^="movimiento"] img:first-child{
+    border: 2.5px solid black;
+    width: 15%;
+    height: 25%;
+}
+
+.div-moves-pokemon [class ^="movimiento"]{
+    font-size: 1.25vw;
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 70%;
+    height: 7%;
+    transition: all 0.2s ease-in-out;
+    filter: saturate(2);
+    margin-left: 10%;
+    /* clip-path: polygon(25% 0, 75% 0, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0 75%, 0 25%);*/
+    border-radius: 15%;
+    border: 2px solid black;
+    box-shadow: 1px 1px 1px 1px black;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.div-moves-pokemon [class ^="movimiento"]:hover{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.25);
+}
+
+.div-moves-pokemon [class ^="movimiento"]:active{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.20);
+}
+
+.busqueda-ataques [class ^="movimiento"]{
+    font-size: 1.25vw;
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 93.5%;
+    height: 7%;
+    margin-right: 3.5%;
+    margin-left: 2.5%;
+    border: 2px solid black;
+    box-shadow: 1px 1px 1px 1px black;
+    transition: all 0.2s ease-in-out;
+    filter: saturate(2);
+    transform: skew(345deg);
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.busqueda-ataques [class ^="tipo-movimiento"]{
+    text-transform: uppercase;
+    font-size: 1vw;
+}
+
+.movimientograss{
+    background-color: 	rgb(120,200,80);
+}
+
+.movimientofire{
+    background-color: 	rgb(240,80,48);
+}
+
+.movimientowater{
+    background-color: rgb(56,153,248);
+}
+
+.movimientoelectric{
+    background-color: 	rgb(248,208,48);
+    color: black
+}
+
+.movimientoground{
+    background-color: rgb(234,214,164);
+}
+
+.movimientoflying{
+    background-color: 	rgb(152,168,240);
+}
+
+.movimientopsychic{
+    background-color: 	rgb(248,112,160);
+}
+
+.movimientobug{
+    background-color: 	rgb(168,184,32);
+}
+
+.movimientorock{
+    background-color: rgb(128, 64, 0);
+}
+
+.movimientoghost{
+    background-color: rgb(96,96,176);
+}
+
+.movimientodark{
+    background-color: rgb(85, 62, 50);
+    color: white;
+}
+
+.movimientosteel{
+    background-color: rgb(168,168,192);
+}
+
+.movimientofairy{
+    background-color: rgb(231,159,231);
+}
+
+.movimientonormal{
+    background-color: rgb(168,160,144);
+}
+
+.movimientofighting{
+    background-color: orange;
+}
+
+.movimientopoison{
+    background-color: purple;
+}
+
+.movimientodragon{
+    background-color: darkblue;
+    color: white
+}
+
+.movimientoice{
+    background-color: rgb(88,200,224);
+}
+
+.sinmovimiento{
+    background-color: transparent;
+}
+
+.busqueda-ataques [class ^="movimiento"]:hover{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.10);
+}
+
+.busqueda-ataques [class ^="movimiento"]:active{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.10);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.nombre-movimiento{
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    font-size: 1vw;
+}
+
+.elemento-a-buscar [class ^="movimiento"]{
+    font-size: 1.25vw;
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 93.5%;
+    height: 7%;
+    margin-right: 3.5%;
+    margin-left: 2.5%;
+    border: 2px solid black;
+    box-shadow: 1px 1px 1px 1px black;
+    transition: all 0.2s ease-in-out;
+    filter: saturate(2);
+    transform: skew(345deg);
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.elemento-a-buscar [class ^="tipo-movimiento"]{
+    text-transform: uppercase;
+}
+
+.elemento-a-buscar [class ^="movimiento"]:hover{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.10);
+}
+
+.elemento-a-buscar [class ^="movimiento"]:active{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.10);
+}
+
+
+
+/*############ CONTENIDO VISUAL ############*/
+
+.div-info-general-move {
+    font-size: 1vw;
+    margin-left: 40%;
+    width: 20%;
+    height: 18%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    font-weight: bold;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+.div-move-name {
+    width: 100%;
+    height: 75%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-bottom: 2px solid black;
+    align-items: center;
+    text-transform: capitalize;
+    background: darkgrey;
+    /* background-color: #8fe3fd; */
+}
+
+.div-move-name p{
+    background: transparent;
+}
+
+.div-move-type-pp {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: darkgrey;
+}
+
+.div-move-type {
+    margin: 2%;
+    width: 50%;
+    height: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-move-type p{
+    height: 60%;
+    font-size: 0.9vw;
+    padding: 4%;
+    border: 1px solid black;
+    border-radius: 5px;
+    filter: saturate(2);
+    text-transform: uppercase;
+    display: flex;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-move-pp {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.div-info-concreta-move {
+    width: 82%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10% 0 5%;
+}
+
+.div-info-move {
+    margin-top: 0.5%;
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6%;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.div-info-move label {
+    width: 70%;
+    height: 5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2vw;
+    font-weight: bold;
+    padding: 1%;
+    border: calc(0.10vw + 0.20vh) solid black;
+    border-radius: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    filter: saturate(2);
+    text-transform: capitalize;
+}
+
+#mode-info-type{
+    box-shadow: 0;
+}
+
+
+#move-info-damage-class {
+    height: 50%;
+    width: 60%;
+    border: 0;
+}
+
+.categoria-movimiento {
+    width: 70%;
+    height: 7%;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border: calc(0.10vw + 0.20vh) solid black;
+    border-radius: 5px;
+    padding-right: 1%;
+}
+
+.categoria-movimiento label{
+    box-shadow: none;
+}
+
+
+.categoria-movimiento img{
+    width: 12%;
+    height: 50%;
+}
+
+.div-pokemon-use-move {
+    width: 55%;
+    padding-left: 2%;
+    height: 90%;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.div-pokemon-use-move * {
+    cursor: pointer;
+}
+
+.pokemon-usa-ataque img{
+    width: 20%;
+    height: 115%;
+}
+
+.pokemon-usa-ataque{
+    border: 1px solid yellow;
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+    gap: 8.5%;
+    width: 90%;
+    height: 12%;
+    color: white;
+    font-size: 1.45vw;
+    box-shadow: 1px 1px 1px 1px black;
+    transition: all 0.25s ease-in-out;
+    transform: skew(345deg);
+    padding-right: 5%;
+    text-transform: capitalize;
+}
+
+.pokemon-usa-ataque:hover{
+    background-color: grey;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.08);
+}
