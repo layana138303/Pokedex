@@ -1,0 +1,76 @@
+* {
+    cursor: url("../img/general/cursor.png") 5 28, auto;
+}
+
+.div-imagen-tabla-tipos {
+    background-image: url("../img/background/tablaTipos.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    width: 80%;
+    height: 100%;
+}
+
+.div-info-tipo-tabla-tipos {
+    margin-left: 1%;
+    width: 19%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 10%;
+    gap: 2%;
+}
+
+.div-info-tipo-tabla-tipos ul {
+    width: 100%;
+    list-style: none;
+    font-size: 1vw;
+    color: black;
+}
+
+.div-info-tipo-tabla-tipos ul li {
+    font-size: 1vw;
+    padding-left: 2%;
+    margin: 0.5% 0.5% 0.5% 5%;
+    width: 8vh;
+    border: 1px solid black;
+    border-radius: 10px;
+    filter: saturate(2);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.seleccion-tipo {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5%;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 1%;
+    filter: saturate(2);
+}
+
+.select-a-type {
+    font-size: 1vw;
+    width: 45%;
+}
+
+.select-tipos {
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.8vw;
+    text-align: center;
+}
+
+.tabla-tipos-info-nombre {
+    font-size: 1vw;
+    color: black;
+}

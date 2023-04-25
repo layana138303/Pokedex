@@ -4,6 +4,11 @@
     --tamanioLetraContendio: 1vw;
 }
 
+* {
+    cursor: url("../img/general/cursor.png") 5 28, auto;
+}
+
+
 .pokemon{
     /* display: none; */
     border: 1px solid yellow;
@@ -16,7 +21,7 @@
     background-color: black;
     gap: 7.5%;
     width: 89%;
-    height: 8%;
+    height: 10.82%;
     color: white;
     font-size: var(--tamanioLetraBusqueda);
     box-shadow: 1px 1px 1px 1px black;
@@ -26,7 +31,7 @@
     text-transform: capitalize;
 }
 
-.pokemon:hover{
+.pokemon:hover, .pokemon:focus{
     background-color: grey;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     transform: scale(1.08);
@@ -40,10 +45,6 @@
     overflow-x: hidden;
     padding-left: 1%;
     padding-right: 2.5%;
-}
-
-.div-moves-pokemon * {
-    cursor: pointer;
 }
 
 .div-info-pokemon {
@@ -140,22 +141,15 @@
 .div-imagen-pokemon{
     width: 100%;
     height: 35%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .div-imagen-pokemon img{
-    width: 100%;
     height: 100%;
-    cursor: pointer;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    vertical-align: middle;
-}
-
-.pokemon-imagen{
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
+    aspect-ratio: 1/1;
 }
 
 .div-habilidades-pokemon{
@@ -259,7 +253,18 @@
 }
 
 .div-location-pokemon label{
+    font-size: 1vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: justify;
+    border: 2px solid black;    
+    border-radius: 5px;
+    padding: 1%;
     margin-bottom: 2%;
+    background-color: #f3dec3;
 }
 
 .localizacion{
@@ -321,6 +326,20 @@
     justify-content: center;
     align-items: center;
     vertical-align: middle;
+}
+
+.div-evolution-pokemon label{
+    font-size: 1vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: justify;
+    border: 2px solid black;    
+    border-radius: 5px;
+    padding: 1%;
+    background-color: #f3dec3;
 }
 
 .evolucion{

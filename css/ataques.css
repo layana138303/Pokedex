@@ -2,6 +2,10 @@
     --colorauxiliar: white;
 }
 
+* {
+    cursor: url("../img/general/cursor.png") 5 28, auto;
+}
+
 .busqueda-ataques p{
     text-align: fit-content;
 }
@@ -150,7 +154,7 @@
     background-color: transparent;
 }
 
-.busqueda-ataques [class ^="movimiento"]:hover{
+.busqueda-ataques [class ^="movimiento"]:hover, .busqueda-ataques [class ^="movimiento"]:focus{
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     transform: scale(1.10);
 }
@@ -200,7 +204,7 @@
     text-transform: uppercase;
 }
 
-.elemento-a-buscar [class ^="movimiento"]:hover{
+.elemento-a-buscar [class ^="movimiento"]:hover, .elemento-a-buscar [class ^="movimiento"]:focus{
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     transform: scale(1.10);
 }
@@ -209,7 +213,6 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     transform: scale(1.10);
 }
-
 
 
 /*############ CONTENIDO VISUAL ############*/
@@ -225,7 +228,7 @@
     align-items: center;
     vertical-align: middle;
     font-weight: bold;
-    border: 2px solid;
+    border: 2px solid black;
     border-radius: 5px;
 }
 
@@ -239,7 +242,6 @@
     align-items: center;
     text-transform: capitalize;
     background: darkgrey;
-    /* background-color: #8fe3fd; */
 }
 
 .div-move-name p{
@@ -324,14 +326,16 @@
     border: calc(0.10vw + 0.20vh) solid black;
     border-radius: 5px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    filter: saturate(2);
     text-transform: capitalize;
 }
 
-#mode-info-type{
-    box-shadow: 0;
+.div-info-move label:not(#move-info-type, #move-info-damage-class), .categoria-movimiento{
+    background-color: darkgray;
 }
 
+#move-info-type{
+    filter: saturate(2);
+}
 
 #move-info-damage-class {
     height: 50%;
@@ -370,13 +374,9 @@
     overflow-x: hidden;
 }
 
-.div-pokemon-use-move * {
-    cursor: pointer;
-}
-
 .pokemon-usa-ataque img{
-    width: 20%;
-    height: 115%;
+    width: 15%;
+    aspect-ratio: 1/1;
 }
 
 .pokemon-usa-ataque{

@@ -1,18 +1,8 @@
-const busquedaTotal = document.getElementById("busqueda-total");
-const contenido = document.getElementById("contenido");
-const buscador = document.getElementById("buscador");
-const botonBusqueda = document.getElementById("boton-busqueda");
-
-const divBusquedaPokedex = document.getElementById("div-busqueda-pokedex");
-const divBusquedaRegiones = document.getElementById("div-busqueda-regiones");
-const divBusquedaAtaques = document.getElementById("div-busqueda-ataques");
-const divBusquedaTablaTipos = document.getElementById("div-busqueda-tabla-tipos");
-const divElementoABuscar = document.getElementById("div-elemento-a-buscar");
-
 const divContenidoPokedex = document.getElementById("div-contenido-visual-pokedex");
 const divContenidoRegiones = document.getElementById("div-contenido-visual-regiones");
 const divContenidoAtaques = document.getElementById("div-contenido-visual-ataques");
 const divContenidoTablaTipos = document.getElementById("div-contenido-visual-tabla-tipos");
+const divContenidoJuego = document.getElementById("div-contenido-visual-juego");
 
 /*############# POKEDEX ##############*/
 const imagenPokemon = document.getElementById("pokemon-imagen");
@@ -69,145 +59,64 @@ const personajeRegion2 = document.getElementById("imagen-personaje2");
 let intervaloParrafoRegiones;
 
 
-/*#####################################*/
+/*############# TABLA TIPOS #############*/
+const divSeleccionTipo = document.getElementById("seleccion-tipo");
+const labelSelectorTipos = document.getElementById("select-a-type");
+const selectorTipos = document.getElementById("select-tipos");
+const nombreTipo = document.getElementById("tabla-tipos-info-nombre");
+const inmunidadesTipo = document.getElementById("tabla-tipos-info-inmunidades");
+const debilidadesTipo = document.getElementById("tabla-tipos-info-debilidades");
+const efectividadesTipo = document.getElementById("tabla-tipos-info-efectividades");
 
 
-function soloMostrarPokedex(){
-    busquedaTotal.style.display = "block";
-    divBusquedaAtaques.style.display = "none";
-    divBusquedaRegiones.style.display = "none";
-    divBusquedaTablaTipos.style.display = "none";
-    divBusquedaPokedex.style.display = "block";
-    divElementoABuscar.style.display = "none";
-    inputBusqueda.placeholder = "Busca pokemon por nombre o id";
-    inputBusqueda.value = "";
-    inputBusqueda.disabled = false;
+/*################ IDIOMA ###############*/
+const idioma = document.getElementById("boton-idioma");
 
-    busquedaTotal.style.width = "20%";
-    buscador.style.width = "100%";
-    contenido.style.width = "70%";
+idioma.addEventListener("click", () => {
+    fetch('traduccion.json')
+        .then(response => response.json())
+        .then(traduccion => {
+            const elementosCambioIdioma = document.querySelectorAll(".cambio-idioma");
 
-    clearInterval(intervaloParrafoRegiones);
-}
+            const currentLanguage = document.documentElement.lang;
 
-function soloMostrarRegiones(){
-    busquedaTotal.style.display = "block";
-    divBusquedaAtaques.style.display = "none";
-    divBusquedaPokedex.style.display = "none";
-    divBusquedaTablaTipos.style.display = "none";
-    divBusquedaRegiones.style.display = "block";
-    divElementoABuscar.style.display = "none";
-    inputBusqueda.placeholder = "";
-    inputBusqueda.value = "";
-    inputBusqueda.disabled = true;
+            let newLanguage;
+            if (currentLanguage == "en") {
+                idioma.style.backgroundImage = "url('img/general/spanishLanguage.png')";        
+                newLanguage = 'es';
+            } else {
+                idioma.style.backgroundImage = "url('img/general/englishLanguage.png')"; 
+                newLanguage = 'en';
+            }
 
-    busquedaTotal.style.width = "10%";
-    buscador.style.width = "95%";
-    contenido.style.width = "80%";
-}
+            document.documentElement.lang = newLanguage;
 
-function soloMostrarAtaques(){
-    busquedaTotal.style.display = "block";
-    divBusquedaPokedex.style.display = "none";
-    divBusquedaRegiones.style.display = "none";
-    divBusquedaTablaTipos.style.display = "none";
-    divBusquedaAtaques.style.display = "block";
-    divElementoABuscar.style.display = "none";
-    inputBusqueda.placeholder = "Busca ataque por nombre o tipo";
-    inputBusqueda.value = "";
-    inputBusqueda.disabled = false;
+            elementosCambioIdioma.forEach(elemento => {
+                elemento.textContent = traduccion[newLanguage][elemento.id];
+            });
 
-    busquedaTotal.style.width = "20%";
-    buscador.style.width = "100%";
-    contenido.style.width = "70%";
-}
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                const placeholderKey = input.getAttribute('data-placeholder-key');
+                
+                const translatedPlaceholder = traduccion[newLanguage][placeholderKey];
 
-function soloMostrarTablaTipos(){
-    busquedaTotal.style.display = "none";
-    divBusquedaPokedex.style.display = "none";
-    divBusquedaRegiones.style.display = "none";
-    divBusquedaAtaques.style.display = "none";
-    divBusquedaTablaTipos.style.display = "block";
-    divElementoABuscar.style.display = "none";
-
-    contenido.style.width = "90%";
-
-    mostrarContenidoTablaTipos();
-}
-
-function juego() {
-    busquedaTotal.style.display = "none";
-    divBusquedaPokedex.style.display = "none";
-    divBusquedaRegiones.style.display = "none";
-    divBusquedaAtaques.style.display = "none";
-    divBusquedaTablaTipos.style.display = "none";
-    divElementoABuscar.style.display = "none";
-
-    contenido.style.width = "90%";
-
-    empezarJuego();
-}
-
-inputBusqueda.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        botonBusqueda.click();
-    }
+                input.setAttribute('placeholder', translatedPlaceholder);
+            });
+        });
 });
-botonBusqueda.addEventListener("click", buscarElemento);
 
-function buscarElemento() {
-    divElementoABuscar.innerHTML = "";
-    let elementoABuscar = inputBusqueda.value.toLowerCase();
-    let encontrado = false;
-    if (inputBusqueda.placeholder.includes("pokemon")) {
-        divBusquedaPokedex.style.display = "none";
-        divElementoABuscar.style.display = "block";
 
-        const divsPokemon = divBusquedaPokedex.querySelectorAll('.pokemon');
-        divsPokemon.forEach(div => {
-            let nombre = div.getAttribute("name").toLowerCase();
-            let id = div.classList[1];
-            let tipo1 = div.classList[2];
-            let tipo2;
-            if (div.classList.length == 4) {
-                tipo2 = div.classList[3];
-            }
-            if (elementoABuscar == nombre || parseInt(elementoABuscar) ==  parseInt(id) || elementoABuscar == tipo1 || elementoABuscar == tipo2) {
-                divElementoABuscar.appendChild(div.cloneNode(true));
-                encontrado = true;
-                return;
-            }
-        });
-        if (!encontrado) {
-            inputBusqueda.placeholder = "No se ha encontrado el pokemon";
-        }
-    } else if (inputBusqueda.placeholder.includes("ataque")) {
-        divBusquedaAtaques.style.display = "none";
-        divElementoABuscar.style.display = "block";
+/*######################################*/
 
-        const divsMovimiento = divBusquedaAtaques.querySelectorAll('div [class^="movimiento"]');
-        divsMovimiento.forEach(div => {
-            let nombre = div.getAttribute("name").toLowerCase();
-            let tipo = div.classList[0];
-            if (elementoABuscar == nombre || (tipo.includes(elementoABuscar) && elementoABuscar.length >= 3)) {
-                divElementoABuscar.style.padding = "0";
-                divElementoABuscar.appendChild(div.cloneNode(true));
-                encontrado = true;
-                return;
-            }
-        });
-        if (!encontrado) {
-            inputBusqueda.placeholder = "No se ha encontrado el ataque";
-        }
-    }
-    inputBusqueda.value = "";
-}
+let clickListeners = [];
 
 function mostrarContenidoPokemon(pokemon){
     divContenidoPokedex.style.display = "block";
     divContenidoRegiones.style.display = "none";
     divContenidoAtaques.style.display = "none";
     divContenidoTablaTipos.style.display = "none";
+    divContenidoJuego.style.display = "none";
 
     let imagenFrente = pokemon.sprites.front_default;
     let imagenAtras = pokemon.sprites.back_default;
@@ -256,7 +165,7 @@ function mostrarContenidoPokemon(pokemon){
         ".movimientofairy",
         ".movimientonormal",
         ".movimientofighting",
-        ".movimientoposion",
+        ".movimientopoison",
         ".movimientodragon",
         ".movimientoice"
       ];
@@ -288,8 +197,13 @@ function mostrarContenidoPokemon(pokemon){
 
     /*Stats e imagen de pokemon*/
 
-    imagenPokemon.removeEventListener("click", cambiarImagenPokemon);
+    for (let i = 0; i < clickListeners.length; i++) {
+        const listener = clickListeners[i];
+        imagenPokemon.removeEventListener("click", listener);
+    }
+
     imagenPokemon.addEventListener("click", cambiarImagenPokemon);
+    clickListeners.push(cambiarImagenPokemon);
 
     function cambiarImagenPokemon() {
         if (imagenPokemon.getAttribute("src") == imagenFrente) {
@@ -313,29 +227,77 @@ function mostrarContenidoPokemon(pokemon){
 
     imagenPokemon.setAttribute("src", imagenFrente);
 
-    idPokemon.innerText = "Id pokemon: #" + ("0000".slice(0, -(id.toString().length)) + id);
-    nombrePokemon.innerText = "Nombre: " + nombre;
-    alturaPokemon.innerHTML = "Altura: " + (altura / 10).toFixed(2) + " m";
-    pesoPokemon.innerHTML = "Peso:  " + (peso / 10).toFixed(2) + " kg";
-    tipo1Pokemon.innerHTML = tipos[0].type.name;
-    tipo1Pokemon.setAttribute("class", "movimiento" + tipos[0].type.name);
-    if (tipos.length > 1) {
-        tipo2Pokemon.innerHTML = tipos[1].type.name;
-        tipo2Pokemon.setAttribute("class", "movimiento" + tipos[1].type.name);
-    } else {
-        tipo2Pokemon.innerHTML = "";
-        tipo2Pokemon.setAttribute("class", "sinmovimiento");
-    }
-    habilidad1Pokemon.innerHTML = habilidades[0].ability.name;
-    if (habilidades.length > 1) {
-        habilidad2Pokemon.innerHTML = habilidades[1].ability.name;
-    }
-    hpPokemon.innerText = "PS: " + hp;
-    ataquePokemon.innerText = "At: " + ataque;
-    defensaPokemon.innerText = "Def: " + defensa;
-    ataqueEspecialPokemon.innerText = "At. sp: " + ataqueEspecial;
-    defensaEspecialPokemon.innerText = "Def. sp: " + defensaEspecial;
-    velocidadPokemon.innerText = "Vel: " + velocidad;
+    idioma.addEventListener("click", () => {
+        fetch('traduccion.json')
+            .then(response => response.json())
+            .then(traduccion => {
+                let idiomaActual = document.documentElement.lang;
+
+                let elementosCambioIdioma = document.querySelectorAll(".pokedex-cambio-idioma");
+                elementosCambioIdioma.forEach(elemento => {
+                    elemento.textContent = traduccion[idiomaActual][elemento.id];
+                });
+
+                idPokemon.innerHTML += ("0000".slice(0, -(id.toString().length)) + id);
+                nombrePokemon.innerHTML += nombre;
+                alturaPokemon.innerHTML += (altura / 10).toFixed(2) + " m";
+                pesoPokemon.innerHTML += (peso / 10).toFixed(2) + " kg";
+                tipo1Pokemon.innerHTML = tipos[0].type.name;
+                tipo1Pokemon.setAttribute("class", "movimiento" + tipos[0].type.name);
+                if (tipos.length > 1) {
+                    tipo2Pokemon.innerHTML = tipos[1].type.name;
+                    tipo2Pokemon.setAttribute("class", "movimiento" + tipos[1].type.name);
+                } else {
+                    tipo2Pokemon.innerHTML = "";
+                    tipo2Pokemon.setAttribute("class", "sinmovimiento");
+                }
+                habilidad1Pokemon.innerHTML = habilidades[0].ability.name;
+                if (habilidades.length > 1) {
+                    habilidad2Pokemon.innerHTML = habilidades[1].ability.name;
+                }
+                hpPokemon.innerHTML += hp;
+                ataquePokemon.innerHTML += ataque;
+                defensaPokemon.innerHTML += defensa;
+                ataqueEspecialPokemon.innerHTML += ataqueEspecial;
+                defensaEspecialPokemon.innerHTML += defensaEspecial;
+                velocidadPokemon.innerHTML += velocidad;
+            });
+    });
+
+    fetch('traduccion.json')
+        .then(response => response.json())
+        .then(traduccion => {
+            let idiomaActual = document.documentElement.lang;
+
+            let elementosCambioIdioma = document.querySelectorAll(".pokedex-cambio-idioma");
+            elementosCambioIdioma.forEach(elemento => {
+                elemento.textContent = traduccion[idiomaActual][elemento.id];
+            });
+
+            idPokemon.innerHTML += ("0000".slice(0, -(id.toString().length)) + id);
+            nombrePokemon.innerHTML += nombre;
+            alturaPokemon.innerHTML += (altura / 10).toFixed(2) + " m";
+            pesoPokemon.innerHTML += (peso / 10).toFixed(2) + " kg";
+            tipo1Pokemon.innerHTML = tipos[0].type.name;
+            tipo1Pokemon.setAttribute("class", "movimiento" + tipos[0].type.name);
+            if (tipos.length > 1) {
+                tipo2Pokemon.innerHTML = tipos[1].type.name;
+                tipo2Pokemon.setAttribute("class", "movimiento" + tipos[1].type.name);
+            } else {
+                tipo2Pokemon.innerHTML = "";
+                tipo2Pokemon.setAttribute("class", "sinmovimiento");
+            }
+            habilidad1Pokemon.innerHTML = habilidades[0].ability.name;
+            if (habilidades.length > 1) {
+                habilidad2Pokemon.innerHTML = habilidades[1].ability.name;
+            }
+            hpPokemon.innerHTML += hp;
+            ataquePokemon.innerHTML += ataque;
+            defensaPokemon.innerHTML += defensa;
+            ataqueEspecialPokemon.innerHTML += ataqueEspecial;
+            defensaEspecialPokemon.innerHTML += defensaEspecial;
+            velocidadPokemon.innerHTML += velocidad;
+        });
 
 
     /*Localizaciones y evolucion pokemon*/
@@ -466,16 +428,24 @@ function mostrarContenidoPokemon(pokemon){
 
 }
 
+let intervalos = [];
+
 function mostrarContenidoRegion(region){
     divContenidoPokedex.style.display = "none";
     divContenidoRegiones.style.display = "block";
     divContenidoAtaques.style.display = "none";
     divContenidoTablaTipos.style.display = "none";
+    divContenidoJuego.style.display = "none";
 
     let nombre = region.name;
 
     mapaRegion.style.backgroundImage = `url("img/regiones/${nombre}.png")`;
     
+    if (nombre == "kanto")
+        parrafoRegion.style.fontSize = '0.9vw';
+    else
+        parrafoRegion.style.fontSize = '1vw';
+
     if (nombre == "galar") {
         personajes.style.width = '25%';
         localizacionesRegion.style.display = 'none';
@@ -512,23 +482,30 @@ function mostrarContenidoRegion(region){
         lugaresRegion.appendChild(divLocalizacion);
     });
 
+    for (let i = 0; i < intervalos.length; i++) {
+        clearInterval(intervalos[i]);
+    }
+
     parrafoRegion.innerHTML = "";
     fetch('frases.json')
         .then(response => response.json())
-        .then(data => {
-            let frases = data[nombre];
-            let numFrase = Math.floor(Math.random() * frases.length);
-            while (frases[numFrase].includes(mapaRegion.innerHTML) && mapaRegion.innerHTML != "") {
-                numFrase = Math.floor(Math.random() * frases.length);
+        .then(frases => {
+            let idiomaActual = document.documentElement.lang;
+
+            let frasesRegion = frases[idiomaActual][nombre];
+            let numFrase = Math.floor(Math.random() * frasesRegion.length);
+            while (frasesRegion[numFrase].includes(mapaRegion.innerHTML) && mapaRegion.innerHTML != "") {
+                numFrase = Math.floor(Math.random() * frasesRegion.length);
             }
             let x = 0;
             function escribirTexto() {
-                parrafoRegion.innerHTML = `<p>${frases[numFrase].substring(0, x)}</p>`;
+                parrafoRegion.innerHTML = `<p>${frasesRegion[numFrase].substring(0, x)}</p>`;
                 x++;
-                if (x > frases[numFrase].length)
+                if (x > frasesRegion[numFrase].length)
                     clearInterval(intervaloParrafoRegiones);
             }
             intervaloParrafoRegiones = setInterval(escribirTexto, 20);
+            intervalos.push(intervaloParrafoRegiones);
         })
         .catch(error => console.error(error));
 }
@@ -539,6 +516,7 @@ function mostrarContenidoAtaque(ataque){
     divContenidoRegiones.style.display = "none";
     divContenidoAtaques.style.display = "block";
     divContenidoTablaTipos.style.display = "none";
+    divContenidoJuego.style.display = "none";
 
     let nombre = ataque.name;
     let categoria = ataque.damage_class.name;
@@ -582,22 +560,53 @@ function mostrarContenidoAtaque(ataque){
         }
     });
 
-    tipoMovimiento.setAttribute("class", "movimiento" + tipo);
-    tipoMovimientoInfoGeneral.setAttribute("class", "movimiento" + tipo);
-    infoGeneralMovimiento.setAttribute("class", "div-info-general-move movimiento" + tipo);
+    idioma.addEventListener("click", () => {
+        fetch('traduccion.json')
+            .then(response => response.json())
+            .then(traduccion => {
+                let idiomaActual = document.documentElement.lang;
 
-    nombreMovimientoInfoGeneral.innerHTML = nombre;
-    tipoMovimientoInfoGeneral.innerHTML = tipo;
-    ppMovimientoInfoGeneral.innerHTML = "PP " + pp + "/" + pp;
+                let elementosCambioIdioma = document.querySelectorAll(".ataques-cambio-idioma");
+                elementosCambioIdioma.forEach(elemento => {
+                    elemento.textContent = traduccion[idiomaActual][elemento.id];
+                });
 
-    nombreMovimiento.innerHTML = "Nombre: " + nombre;
-    categoriaMovimiento.innerHTML = "Categoria: " + categoria;
-    imagenCategoriaMovimiento.setAttribute("src", "img/general/" + categoria + "Attack.png");
-    tipoMovimiento.innerHTML = "Tipo: " + tipo;
-    potenciaMovimiento.innerHTML = "Potencia: " + potencia;
-    precisionMovimiento.innerHTML = "Precision: " + precision;
-    ppMovimiento.innerHTML = "PP: " + pp;
-    prioridadMovimiento.innerHTML = "Prioridad: " + prioridad;
+                nombreMovimiento.innerHTML += nombre;
+                categoriaMovimiento.innerHTML += categoria;
+                tipoMovimiento.innerHTML += tipo;
+                potenciaMovimiento.innerHTML += potencia;
+                precisionMovimiento.innerHTML += precision;
+                ppMovimiento.innerHTML += pp;
+                prioridadMovimiento.innerHTML += prioridad;
+            });
+    });
+
+    fetch('traduccion.json')
+        .then(response => response.json())
+        .then(traduccion => {
+            let idiomaActual = document.documentElement.lang;
+
+            let elementosCambioIdioma = document.querySelectorAll(".ataques-cambio-idioma");
+            elementosCambioIdioma.forEach(elemento => {
+                elemento.textContent = traduccion[idiomaActual][elemento.id];
+            });
+
+            tipoMovimiento.setAttribute("class", "movimiento" + tipo + " ataques-cambio-idioma");
+            tipoMovimientoInfoGeneral.setAttribute("class", "movimiento" + tipo);
+
+            nombreMovimientoInfoGeneral.innerHTML = nombre;
+            tipoMovimientoInfoGeneral.innerHTML = tipo;
+            ppMovimientoInfoGeneral.innerHTML = "PP: " + pp + "/" + pp;
+
+            nombreMovimiento.innerHTML += nombre;
+            categoriaMovimiento.innerHTML += categoria;
+            imagenCategoriaMovimiento.setAttribute("src", "img/general/" + categoria + "Attack.png");
+            tipoMovimiento.innerHTML += tipo;
+            potenciaMovimiento.innerHTML += potencia;
+            precisionMovimiento.innerHTML += precision;
+            ppMovimiento.innerHTML += pp;
+            prioridadMovimiento.innerHTML += prioridad;
+        });    
 }
 
 function mostrarContenidoTablaTipos(){
@@ -605,11 +614,105 @@ function mostrarContenidoTablaTipos(){
     divContenidoRegiones.style.display = "none";
     divContenidoAtaques.style.display = "none";
     divContenidoTablaTipos.style.display = "block";
+    divContenidoJuego.style.display = "none";    
+
+    fetch('tipos.json')
+        .then(response => response.json())
+        .then(tipos => {
+            selectorTipos.addEventListener('change', function () {
+                let tipoSeleccionado = selectorTipos.value;
+                let tipo = tipos[tipoSeleccionado];
+                let nombre = tipo["name"];
+                let inmunidades = tipo["immunes"];
+                let debilidades = tipo["weaknesses"];
+                let efectividades = tipo["effectiveness"];
+
+                idioma.addEventListener("click", () => {
+                    fetch('traduccion.json')
+                        .then(response => response.json())
+                        .then(traduccion => {
+                            let idiomaActual = document.documentElement.lang;
+
+                            let elementosCambioIdioma = document.querySelectorAll(".tabla-tipos-cambio-idioma");
+                            elementosCambioIdioma.forEach(elemento => {
+                                elemento.textContent = traduccion[idiomaActual][elemento.id];
+                            });
+
+                            nombreTipo.innerHTML += nombre;
+
+                            inmunidadesTipo.innerHTML = traduccion[idiomaActual][inmunidadesTipo.id];
+                            debilidadesTipo.innerHTML = traduccion[idiomaActual][debilidadesTipo.id];
+                            efectividadesTipo.innerHTML = traduccion[idiomaActual][efectividadesTipo.id];
+                            
+                            inmunidades.forEach(inmunidad => {
+                                let li = document.createElement("li");
+                                li.innerHTML = inmunidad;
+                                li.setAttribute("class", "movimiento" + inmunidad.toLowerCase());
+                                inmunidadesTipo.appendChild(li);
+                            });
+                            debilidades.forEach(debilidad => {
+                                let li = document.createElement("li");
+                                li.innerHTML = debilidad;
+                                li.setAttribute("class", "movimiento" + debilidad.toLowerCase());
+                                debilidadesTipo.appendChild(li);
+                            });
+                            efectividades.forEach(efectividad => {
+                                let li = document.createElement("li");
+                                li.innerHTML = efectividad;
+                                li.setAttribute("class", "movimiento" + efectividad.toLowerCase());
+                                efectividadesTipo.appendChild(li);
+                            });
+                        });
+                });
+
+                fetch('traduccion.json')
+                    .then(response => response.json())
+                    .then(traduccion => {
+                        let idiomaActual = document.documentElement.lang;
+
+                        let elementosCambioIdioma = document.querySelectorAll(".tabla-tipos-cambio-idioma");
+                        elementosCambioIdioma.forEach(elemento => {
+                            elemento.textContent = traduccion[idiomaActual][elemento.id];
+                        });
+
+                        nombreTipo.innerHTML += nombre;
+
+                        inmunidadesTipo.innerHTML = traduccion[idiomaActual][inmunidadesTipo.id];
+                        debilidadesTipo.innerHTML = traduccion[idiomaActual][debilidadesTipo.id];
+                        efectividadesTipo.innerHTML = traduccion[idiomaActual][efectividadesTipo.id];
+                        
+                        inmunidades.forEach(inmunidad => {
+                            let li = document.createElement("li");
+                            li.innerHTML = inmunidad;
+                            li.setAttribute("class", "movimiento" + inmunidad.toLowerCase());
+                            inmunidadesTipo.appendChild(li);
+                        });
+                        debilidades.forEach(debilidad => {
+                            let li = document.createElement("li");
+                            li.innerHTML = debilidad;
+                            li.setAttribute("class", "movimiento" + debilidad.toLowerCase());
+                            debilidadesTipo.appendChild(li);
+                        });
+                        efectividades.forEach(efectividad => {
+                            let li = document.createElement("li");
+                            li.innerHTML = efectividad;
+                            li.setAttribute("class", "movimiento" + efectividad.toLowerCase());
+                            efectividadesTipo.appendChild(li);
+                        });
+        
+                        divSeleccionTipo.setAttribute("class", "seleccion-tipo movimiento" + nombre.toLowerCase());
+                        labelSelectorTipos.setAttribute("class", "select-a-type movimiento" + nombre.toLowerCase() + " cambio-idioma");
+                    });
+            });
+        })
+        .catch(error => console.error(error))
 }
 
-function empezarJuego() {
+function mostrarContenidoJuego(){
     divContenidoPokedex.style.display = "none";
     divContenidoRegiones.style.display = "none";
     divContenidoAtaques.style.display = "none";
     divContenidoTablaTipos.style.display = "none";
+    divContenidoJuego.style.display = "flex";
+    initializeGame();
 }
