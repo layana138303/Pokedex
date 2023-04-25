@@ -8,7 +8,7 @@ const oak = document.getElementById("oak-clickable");
 
 function soloMostrarDialogoOak() {
     let frasesDialogoOak = [];
-    fetch('frases.json')
+    fetch('json/frases.json')
         .then(response => response.json())
         .then(frases => {
             let idiomaActual = document.documentElement.lang;

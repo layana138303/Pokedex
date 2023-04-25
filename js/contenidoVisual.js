@@ -73,7 +73,7 @@ const efectividadesTipo = document.getElementById("tabla-tipos-info-efectividade
 const idioma = document.getElementById("boton-idioma");
 
 idioma.addEventListener("click", () => {
-    fetch('traduccion.json')
+    fetch('json/traduccion.json')
         .then(response => response.json())
         .then(traduccion => {
             const elementosCambioIdioma = document.querySelectorAll(".cambio-idioma");
@@ -228,7 +228,7 @@ function mostrarContenidoPokemon(pokemon){
     imagenPokemon.setAttribute("src", imagenFrente);
 
     idioma.addEventListener("click", () => {
-        fetch('traduccion.json')
+        fetch('json/traduccion.json')
             .then(response => response.json())
             .then(traduccion => {
                 let idiomaActual = document.documentElement.lang;
@@ -264,7 +264,7 @@ function mostrarContenidoPokemon(pokemon){
             });
     });
 
-    fetch('traduccion.json')
+    fetch('json/traduccion.json')
         .then(response => response.json())
         .then(traduccion => {
             let idiomaActual = document.documentElement.lang;
@@ -486,14 +486,41 @@ function mostrarContenidoRegion(region){
         clearInterval(intervalos[i]);
     }
 
+    idioma.addEventListener("click", () => {
+        fetch('json/frases.json')
+            .then(response => response.json())
+            .then(frases => {
+                let idiomaActual = document.documentElement.lang;
+                let frasesRegion = frases[idiomaActual][nombre];
+
+                for (let i = 0; i < intervalos.length; i++) {
+                    clearInterval(intervalos[i]);
+                }
+                parrafoRegion.innerHTML = "";
+
+                let x = 0;
+                function escribirTexto() {
+                    parrafoRegion.innerHTML = `<p>${frasesRegion[numFrase].substring(0, x)}</p>`;
+                    x++;
+                    if (x > frasesRegion[numFrase].length)
+                        clearInterval(intervaloParrafoRegiones);
+                }
+                intervaloParrafoRegiones = setInterval(escribirTexto, 20);
+                intervalos.push(intervaloParrafoRegiones);
+            })
+            .catch(error => console.error(error));
+    });
+
+    let numFrase = 0;
+
     parrafoRegion.innerHTML = "";
-    fetch('frases.json')
+    fetch('json/frases.json')
         .then(response => response.json())
         .then(frases => {
             let idiomaActual = document.documentElement.lang;
 
             let frasesRegion = frases[idiomaActual][nombre];
-            let numFrase = Math.floor(Math.random() * frasesRegion.length);
+            numFrase = Math.floor(Math.random() * frasesRegion.length);
             while (frasesRegion[numFrase].includes(mapaRegion.innerHTML) && mapaRegion.innerHTML != "") {
                 numFrase = Math.floor(Math.random() * frasesRegion.length);
             }
@@ -561,7 +588,7 @@ function mostrarContenidoAtaque(ataque){
     });
 
     idioma.addEventListener("click", () => {
-        fetch('traduccion.json')
+        fetch('json/traduccion.json')
             .then(response => response.json())
             .then(traduccion => {
                 let idiomaActual = document.documentElement.lang;
@@ -581,7 +608,7 @@ function mostrarContenidoAtaque(ataque){
             });
     });
 
-    fetch('traduccion.json')
+    fetch('json/traduccion.json')
         .then(response => response.json())
         .then(traduccion => {
             let idiomaActual = document.documentElement.lang;
@@ -616,7 +643,7 @@ function mostrarContenidoTablaTipos(){
     divContenidoTablaTipos.style.display = "block";
     divContenidoJuego.style.display = "none";    
 
-    fetch('tipos.json')
+    fetch('json/tipos.json')
         .then(response => response.json())
         .then(tipos => {
             selectorTipos.addEventListener('change', function () {
@@ -628,7 +655,7 @@ function mostrarContenidoTablaTipos(){
                 let efectividades = tipo["effectiveness"];
 
                 idioma.addEventListener("click", () => {
-                    fetch('traduccion.json')
+                    fetch('json/traduccion.json')
                         .then(response => response.json())
                         .then(traduccion => {
                             let idiomaActual = document.documentElement.lang;
@@ -665,7 +692,7 @@ function mostrarContenidoTablaTipos(){
                         });
                 });
 
-                fetch('traduccion.json')
+                fetch('json/traduccion.json')
                     .then(response => response.json())
                     .then(traduccion => {
                         let idiomaActual = document.documentElement.lang;
