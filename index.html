@@ -4,9 +4,17 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="language" content="en">
+        <meta name="description" content="This page contains an interactive pokedex, like in-game, which provides recurrent information such as stats, regions, type chart, mega pokedex and attacks"> <!-- 155 characters, entre 150 y 160 -->
+        <meta name="keywords" content="type chart, interactive pokedex, pokemon full content"> <!-- 3 como mucho -->
+        <meta name="robots" content="index, all, follow"> <!-- indexar todos los contenidos siguiendo los enlaces declarados-->
+        <meta name="category" content="game">
+        <meta name="audience" content="all">
+        <meta itemprop="telephone" content="666666666">
         <title>Pokedex</title>
 
         <link rel="icon" type="image/x-icon" href="img/general/icon.ico">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
         <!-- CSS -->
         <link rel="stylesheet" href="css/entorno.css">
@@ -16,81 +24,102 @@
         <link rel="stylesheet" href="css/tablatipos.css">
         <link rel="stylesheet" href="juego/doctor_rush.css">
         <link rel="stylesheet" href="css/loginYregistro.css">
+        <link rel="stylesheet" href="css/game.css">
+
+        <!-- JQUERY -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <!-- JS -->
+        <script src="juego/doctor_rush.js" defer></script>
         <script src="js/aside.js" defer></script>
         <script src="js/busqueda.js" defer></script>
         <script src="js/contenidoVisual.js" defer></script>
-        <script src="js/loginYregistro.js" defer></script>
-
-        <!-- FONT -->
-        <link href="https://fonts.cdnfonts.com/css/pokemon-solid" rel="stylesheet">
+        <script src="js/registro.js" defer></script>
+        <script src="js/login.js" defer></script>
     </head>
     <body>
+        <div class="loading" id="loading"></div>
         <div class="general">
-            <div class="imagenes-superior" aria-hidden="true">
-                <div class="idioma" id="idioma">
-                    <button class="boton-idioma" id="boton-idioma"></button>
+            <div class="imagenes-superior">
+                <div class="idioma" id="idioma" aria-hidden="false" aria-label="Change language">
+                    <button class="boton-idioma" id="boton-idioma" aria-label="Change language" tabindex="999"></button>
                 </div>
-                <div class="imagenes-bolas" id="imagenes-bolas1">
+                <div class="imagenes-bolas" id="imagenes-bolas1" aria-hidden="true">
                     <div class="imagen-superior-bola" id="imagen1"></div>
                     <div class="imagen-superior-bola" id="imagen2"></div>
                     <div class="imagen-superior-bola" id="imagen3"></div>
                     <div class="imagen-superior-bola" id="imagen4"></div>
                 </div>
-                <div class="imagen-superior" id="imagen5"></div>
-                <div class="imagenes-bolas" id="imagenes-bolas2">
+                <div class="imagen-superior" id="imagen5" aria-hidden="true"></div>
+                <div class="imagenes-bolas" id="imagenes-bolas2" aria-hidden="true">
                     <div class="imagen-superior-bola" id="imagen6"></div>
                     <div class="imagen-superior-bola" id="imagen7"></div>
                     <div class="imagen-superior-bola" id="imagen8"></div>
                     <div class="imagen-superior-bola" id="imagen9"></div>
                 </div>
-                <div class="imagen-superior" id="imagen10"></div>
-                <div class="imagenes-bolas" id="imagenes-bolas3">
+                <div class="imagen-superior" id="imagen10" aria-hidden="true"></div>
+                <div class="imagenes-bolas" id="imagenes-bolas3" aria-hidden="true">
                     <div class="imagen-superior-bola" id="imagen11"></div>
                     <div class="imagen-superior-bola" id="imagen12"></div>
                     <div class="imagen-superior-bola" id="imagen13"></div>
                     <div class="imagen-superior-bola" id="imagen14"></div>
                 </div>
-                <div class="imagen-superior" id="imagen15"></div>
-                <div class="inicio-sesion" id="inicio-sesion">
-                    <div class="boton-inicio-sesion" id="boton-inicio-sesion">
-                        <button class="boton-inicio-sesion cambio-idioma" id="boton-inicio-sesion" tabindex="1000">Log in</button>
-                    </div>
+                <div class="imagen-superior" id="imagen15" aria-hidden="true"></div>
+                <div class="gestionar-sesion" id="inicio-sesion" aria-hidden="false">
+                    <button class="boton-inicio-sesion cambio-idioma" id="boton-inicio-sesion" tabindex="1000">Log in</button>
+                    <button class="boton-inicio-sesion cambio-idioma" id="boton-cerrar-sesion" tabindex="1000">Log out</button>
                 </div>
             </div>
             <div class="zona-trabajo">
                 <nav class="menu-aside">
                     <div class ="menu-botones">
                         <ul>
-                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="pokedex" tabindex="1001" data-target="div-busqueda-pokedex" onclick="soloMostrarPokedex()">Pokedex</button></li>
-                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="regiones" tabindex="1002" data-target="div-busqueda-regiones" onclick="soloMostrarRegiones()">Regions</button></li>
-                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="ataques" tabindex="1003" data-target="div-busqueda-ataques" onclick="soloMostrarAtaques()">Attacks</button></li>
-                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="tabla-tipos" tabindex="1004" data-target="div-contenido-visual-tabla-tipos" onclick="soloMostrarTablaTipos()">Type table</button></li>
-                            <li><button name="juego" class="boton-aside cambio-idioma" id="juego" tabindex="1005" aria-hidden="true" onclick="soloMostrarJuego()">Game</button></li>
+                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="megadex" tabindex="1001" data-target="div-busqueda-megadex" aria-label="Megadex">MegaDex</button></li>
+                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="pokedex" tabindex="1002" data-target="div-busqueda-pokedex" aria-label="Pokedex">Pokedex</button></li>
+                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="regiones" tabindex="1003" data-target="div-busqueda-regiones" aria-label="Regions">Regions</button></li>
+                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="ataques" tabindex="1004" data-target="div-busqueda-ataques" aria-label="Attacks">Attacks</button></li>
+                            <li><button name="busqueda" class="boton-aside cambio-idioma" id="tabla-tipos" tabindex="1005" data-target="div-contenido-visual-tabla-tipos" aria-label="Type table">Type table</button></li>
+                            <li><button name="juego" class="boton-aside cambio-idioma" id="boton-juego" tabindex="1006" aria-hidden="true" aria-label="Game">Game</button></li>
                         </ul>
                     </div>
                     <div class="oak" id="oak">
-                        <img src="img/personajes/oak.png" class="imagen-oak" id="oak-clickable" alt="profesor oak" onclick="soloMostrarDialogoOak()">
+                        <img src="img/personajes/oak.webp" class="imagen-oak" id="oak-clickable" alt="Profesor oak" tabindex="1007">
                     </div>
                 </nav>
                 <div id="busqueda-total" class="busqueda-total">
                     <div id="escondo-buscador">
                         <div class="buscador" id="buscador">
                             <input type="text" class="input-busqueda" id="input-busqueda" data-placeholder-key="busqueda-general" placeholder="Access any window and search">
-                            <button class="boton-busqueda" id="boton-busqueda"> <span class="lupita">&#128269;</span></button>
+                            <button class="boton-busqueda" id="boton-busqueda" aria-label="Search"><span class="lupita" aria-label="search">&#128269;</span></button>
                         </div>
                     </div>
                     <div id="busqueda" class="busqueda">
-                        <div class="busqueda-pokedex" id="div-busqueda-pokedex" tabindex="-1">
-                        </div>
-                        <div class="busqueda-regiones" id="div-busqueda-regiones" tabindex="-1">
-                        </div>
-                        <div class="busqueda-ataques" id="div-busqueda-ataques" tabindex="-1">
-                        </div>
-                        <div class="busqueda-tabla-tipos" id="div-busqueda-tabla-tipos">
-                        </div>
-                        <div class="elemento-a-buscar" id="div-elemento-a-buscar">
+                        <div class="busqueda-pokedex" id="div-busqueda-megadex" tabindex="-1"></div>
+                        <div class="busqueda-pokedex" id="div-busqueda-pokedex" tabindex="-1"></div>
+                        <div class="busqueda-regiones" id="div-busqueda-regiones" tabindex="-1"></div>
+                        <div class="busqueda-ataques" id="div-busqueda-ataques" tabindex="-1"></div>
+                        <div class="busqueda-tabla-tipos" id="div-busqueda-tabla-tipos"></div>
+                        <div class="elemento-a-buscar" id="div-elemento-a-buscar"></div>
+                        <div class="elemento-a-buscar" id="div-user-score">
+                            <h2>Registra tu score</h2>
+                            <label for="user">Usuario</label>
+                            <input type="text" id="input-username" name="user" placeholder="jacobmiller93">
+                            <div>
+                                <table id="score-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th>test</th>
+                                            <th>300</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -104,7 +133,7 @@
                                 <div class="div-moves-pokemon" id="div-moves-pokemon">
                                 </div>
                                 <div class="div-info-pokemon" id="div-info-pokemon">
-                                    <div class="div-info-concreta-pokemon" id="div-info-pokemon">
+                                    <div class="div-info-concreta-pokemon" id="div-info-concreta-pokemon">
                                         <label id="pokemon-numero-pokedex" class="pokedex-cambio-idioma">Pokemon id: #</label>
                                         <label id="pokemon-nombre" class="parte-izquierda pokedex-cambio-idioma">Name: </label>
                                         <label id="pokemon-altura" class="pokedex-cambio-idioma">Height: </label>
@@ -202,7 +231,7 @@
                                 <div class="div-info-tipo-tabla-tipos" id="div-info-tipo-tabla-tipos">
                                     <div id="seleccion-tipo" class="seleccion-tipo">
                                         <label for="select-tipos" id="select-a-type" class="select-a-type cambio-idioma">Select a type: </label>
-                                        <select id="select-tipos" class="select-tipos" name="select-tipos" tabindex="1">
+                                        <select id="select-tipos" class="select-tipos" name="select-tipos" tabindex="1" size="17">
                                             <option value="" selected disabled hidden></option>
                                             <option value="normal" class="movimientonormal">NORMAL</option>
                                             <option value="fighting" class="movimientofighting">FIGHTING</option>
@@ -232,36 +261,36 @@
                             </div>
                         </div>
                         <div class="contenido-visual-juego" id="div-contenido-visual-juego" aria-hidden="true">
-                            <div id="juego">
-                                <div id="interface">
-                                    <div class="score-menu">
-                                        <p class="score">
-                                        SCORE:
-                                        <span id="score">0</span>
-                                        </p>
-                                        <p class="score">
-                                        HIGHSCORE:
-                                        <span id="high-score">0</span>
-                                        </p>
-                                        <p class="score">
-                                        INFECTED OUT:
-                                        <span id="zombies-out-counter">0</span>
-                                        </p>
-                                    </div>
-                                    <div id="super-bullets">
-                                        <span id="sb-counter">0</span>
-                                        <img src="juego/assets/super_bullet.png" width="30px" height="30px" />
-                                    </div>
-                                    <div id="game-over">
-                                        <p id="go">Game over!</p>
-                                        <p id="retry">Press [R] to restart</p>
-                                    </div>
-                                    <div id="home">
-                                        <img src="juego/assets/super_bullet.png" id="deco-sb" />
-                                        <img src="juego/assets/homepage.png" width="100%" height="100%" />
-                                        <p id="start">Press any key</p>
-                                    </div>
+                            <div id="interface">
+                                <div class="score-menu">
+                                    <p class="score">
+                                    SCORE:
+                                    <span id="score">0</span>
+                                    </p>
+                                    <p class="score">
+                                    HIGHSCORE:
+                                    <span id="high-score">0</span>
+                                    </p>
+                                    <p class="score">
+                                    INFECTED OUT:
+                                    <span id="zombies-out-counter">0</span>
+                                    </p>
                                 </div>
+                                <div id="super-bullets">
+                                    <span id="sb-counter">0</span>
+                                    <img src="juego/assets/super_bullet.png" width="30px" height="30px" />
+                                </div>
+                                <div id="game-over">
+                                    <p id="go">Game over!</p>
+                                    <p id="retry">Press [R] to restart</p>
+                                </div>
+                                <div id="home">
+                                    <img src="juego/assets/super_bullet.png" id="deco-sb" />
+                                    <img src="juego/assets/homepage.png" width="100%" height="100%" />
+                                    <p id="start">Press any key</p>
+                                </div>
+                            </div>
+                            <div id="juego">
                                 <div id="game-container">
                                     <div id="shot-area"></div>
                                     <div id="doctor"></div>
@@ -277,23 +306,24 @@
                 <div class="parte-clara-footer">
                     <div class="gris-footer"></div>
                     <div class="rojo-footer"></div>
-                    <!-- <img src="img/pokeball.png" class="imagenPagina" id="imagenPagina"> -->
                 </div>
                 <div class="parte-oscura-footer">
                     <label id="footer" class="cambio-idioma"> © 2023-2024 All rights reserved</label>
                 </div>
             </footer>
         </div>
-        <div class="dialogo-oak">
-            <div id="cerrar-dialogo">
-                <button id="boton-cerrar-dialogo">X</button>
-            </div>
-            <div class="oak-contenido" id="oak-contenido">
-                <div class="oak-contenido-imagen" id="oak-contenido-imagen">
-                    <img id="oak-dentro" src="img/personajes/oak.png" alt="profesor oak">
+        <div class="divDialogo">
+            <div class="dialogo-oak">
+                <div id="cerrar-dialogo">
+                    <button id="boton-cerrar-dialogo">X</button>
                 </div>
-                <div class="oak-contenido-parrafo" id="oak-contenido-parrafo">
-                    <p id="texto-dialogo-oak"></p>
+                <div class="oak-contenido" id="oak-contenido">
+                    <div class="oak-contenido-imagen" id="oak-contenido-imagen">
+                        <img id="oak-dentro" src="img/personajes/oak.webp" alt="profesor oak">
+                    </div>
+                    <div class="oak-contenido-parrafo" id="oak-contenido-parrafo">
+                        <p id="texto-dialogo-oak"></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -302,19 +332,24 @@
                 <div class="cerrar-login" id="cerrar-login">
                     <button id="boton-cerrar-login">X</button>
                 </div>
-                <form class="inicio-general" action="index.php" method="post">
+                <form class="inicio-general" id="login-general">
                     <div class="form-inicio-sesion" id="form-inicio-sesion">
                         <div class="titulo-formulario" id="titulo-formulario">
                             <h1 id="texto-titulo-login" class="cambio-idioma">Welcome!</h1>
                         </div>
                         <div class="login-campos" id="login-campos">
                             <div class="login-usuario" id="login-usuario">
-                                <label for="usuario-login" id="label-login-usuario" class="cambio-idioma">Username</label>
+                                <i class="fas fa-user"></i>
+                                <label for="usuario-login" id="label-login-usuario" class="cambio-idioma">Username*</label>
                                 <input type="text" name="usuario" id="usuario-login" data-placeholder-key="usuario-login" placeholder="Introduce el usuario">
                             </div>
                             <div class="login-contrasena" id="login-contrasena">
-                                <label for="contrasena-login" id="label-login-contrasena" class="cambio-idioma">Password</label>
+                                <i class="fas fa-key"></i>
+                                <label for="contrasena-login" id="label-login-contrasena" class="cambio-idioma">Password*</label>
                                 <input type="password" name="contrasena" id="contrasena-login" data-placeholder-key="contrasena-login" placeholder="Introduce la contraseña">
+                            </div>
+                            <div id="div-mensaje-rellenar-campos-login">
+                                <label id="label-mensaje-rellenar-campos-login" class="cambio-idioma">*This field is required</label>
                             </div>
                             <div class="login-boton-enviar" id="login-boton-enviar">
                                 <button class="boton-enviar-login cambio-idioma" type="button" name="boton-enviar-login" id="boton-enviar-login">Log in</button>
@@ -335,28 +370,37 @@
                 <div class="cerrar-registro" id="cerrar-registro">
                     <button id="boton-cerrar-registro">X</button>
                 </div>
-                <form class="registro-general" action="registro.php" method="post">
+                <form class="registro-general" id="registro-general">
                     <div class="form-inicio-registro" id="form-inicio-registro">
                         <div class="titulo-registro" id="titulo-registro">
                             <h1 id="texto-titulo-registro" class="cambio-idioma">Register</h1>
                         </div>
                         <div class="registro-campos" id="registro-campos">
                             <div class="registro-nombre" id="registro-nombre">
-                                <label for="nombre" id="label-registro-nombre" class="cambio-idioma">Name</label>
+                                <i class="fa fa-male"></i>
+                                <label for="nombre" id="label-registro-nombre" class="cambio-idioma">Name*</label>
                                 <input type="text" name="nombre" id="nombre" data-placeholder-key="nombre-registro" placeholder="Introduce el nombre">
                             </div>
                             <div class="registro-usuario" id="registro-usuario">
-                                <label for="usuario-registro" id="label-registro-usuario" class="cambio-idioma">Username</label>
+                                <i class="fas fa-user"></i>
+                                <label for="usuario-registro" id="label-registro-usuario" class="cambio-idioma">Username*</label>
                                 <input type="text" name="usuario" id="usuario-registro" data-placeholder-key="usuario-registro" placeholder="Introduce el usuario">
                             </div>
-                            <div class="registro-contrasena" id="registro-contrasena">
-                                <label for="contrasena-registro" id="label-registro-contrasena" class="cambio-idioma">Password</label>
-                                <input type="password" name="contrasena" id="contrasena-registro" data-placeholder-key="contrasena-registro" placeholder="Introduce la contraseña">
                             <div class="registro-correo" id="registro-correo">
-                                <label for="correo" id="label-registro-correo" class="cambio-idioma">Email</label>
+                                <i class="fa fa-envelope"></i>
+                                <label for="correo" id="label-registro-correo" class="cambio-idioma">Email*</label>
                                 <input type="email" name="correo" id="correo" data-placeholder-key="email-registro" placeholder="Introduce el correo">
                             </div>
+                            <div class="registro-contrasena" id="registro-contrasena">
+                                <i class="fas fa-key"></i>
+                                <label for="contrasena-registro" id="label-registro-contrasena" class="cambio-idioma">Password*</label>
+                                <input type="password" name="contrasena" id="contrasena-registro" data-placeholder-key="contrasena-registro" placeholder="Introduce la contraseña">
+                            </div>
+                            
                             <!-- Uso de kaptcha -->
+                        </div>
+                        <div id="div-mensaje-rellenar-campos-registro">
+                            <label id="label-mensaje-rellenar-campos-registro" class="cambio-idioma">*This field is required</label>
                         </div>
                     </div>
                 </form>
@@ -365,9 +409,15 @@
                 <button class="boton-enviar-registro cambio-idioma" type="button" name="boton-enviar-registro" id="boton-enviar-registro">Send</button>
                 <button class="boton-volver-login cambio-idioma" type="button" name="boton-volver-login" id="boton-volver-login">Back</button>
             </div>
-            </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="juego/doctor_rush.js"></script>
+        <div id="mensaje-login-registro">
+            <label id="label-mensaje-obtenido"></label>
+        </div>
+        <div id="rotar-dispositivo">
+            <div id="imagen-rotar-dispositivo">
+                <img src="img/general/rotatePhone.webp" alt="Rotate your device">
+            </div>
+            <label class="cambio-idioma">Please rotate your device</label>
+        </div>
     </body>
 </html>

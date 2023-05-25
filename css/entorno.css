@@ -12,7 +12,7 @@ selectores globales al final del codigo, se que soy pesado pero nos puede joder 
 }
 
 * {
-    cursor: url("../img/general/cursor.png") 5 28, auto;
+    cursor: url("../img/general/cursor.webp") 5 28, auto;
 }
 
 
@@ -34,6 +34,69 @@ body{
     height: 100%;
     display: flex;
     flex-direction: column;
+}
+
+#mensaje-login-registro {
+    display: none;
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 1%;
+}
+
+#mensaje-login-registro label {
+    font-size: 1.5vw;
+}
+
+.loading {
+    display: none;
+    position: absolute;
+    top: 45%;
+    left: 62%;
+    height: 100px;
+    width: 100px;
+    background: linear-gradient(to bottom, rgb(254, 0, 1) 50%, white 50% );
+    border-radius: 50%;
+    border: 8px solid black;
+    animation: spin 1s linear infinite;
+    }
+
+.loading::before {
+    content: '';
+    position: absolute;
+    height: 8px;
+    width: 100px;
+    background: black;
+    top: 50px;
+    transform: translatey(-50%);
+    }
+
+.loading::after {
+    content: '';
+    position: absolute;
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    background: white;
+    top: 50px;
+    left: 50px;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 0 0 8px black, inset 0 0 0 10px white, inset 0 0 0 12px black;
+    }
+
+/* Spin Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /*###################### HEADER ##########################*/
@@ -61,9 +124,8 @@ body{
     width: 50%;
     height: 35%;
     border: none;
-    background-image: url("../img/general/englishLanguage.png");
+    background-image: url("../img/general/englishLanguage.webp");
     background-size: 100% 100%;
-    background-position: center;
     background-repeat: no-repeat;
 }
 
@@ -97,64 +159,52 @@ body{
 }
 
 #imagen1{
-    background-image: url("../img/background/pokeball.png");
+    background-image: url("../img/background/pokeball.webp");
 }
 #imagen2{
-    background-image: url("../img/background/superball.png");
+    background-image: url("../img/background/superball.webp");
 }
 #imagen3{
-    background-image: url("../img/background/ultraball.png");
+    background-image: url("../img/background/ultraball.webp");
 }
 #imagen4{
-    background-image: url("../img/background/masterball.png");
+    background-image: url("../img/background/masterball.webp");
 }
 #imagen5{
-    background-image: url("../img/background/1-3gens.png");
+    background-image: url("../img/background/1-3gens.webp");
 }
 #imagen6{
-    background-image: url("../img/background/Safariball.png");
+    background-image: url("../img/background/Safariball.webp");
 }
 #imagen7{
-    background-image: url("../img/background/Rapidball.png");
+    background-image: url("../img/background/Rapidball.webp");
 }
 #imagen8{
-    background-image: url("../img/background/Ceboball.png");
+    background-image: url("../img/background/Ceboball.webp");
 }
 #imagen9{
-    background-image: url("../img/background/Amorball.png");
+    background-image: url("../img/background/Amorball.webp");
 }
 #imagen10{
-    background-image: url("../img/background/4-6gens.png");
+    background-image: url("../img/background/4-6gens.webp");
 }
 #imagen11{
-    background-image: url("../img/background/Lujoball.png");
+    background-image: url("../img/background/Lujoball.webp");
 }
 #imagen12{
-    background-image: url("../img/background/Nidoball.png");
+    background-image: url("../img/background/Nidoball.webp");
 }
 #imagen13{
-    background-image: url("../img/background/Honorball.png");
+    background-image: url("../img/background/Honorball.webp");
 }
 #imagen14{
-    background-image: url("../img/background/Turnoball.png");
+    background-image: url("../img/background/Turnoball.webp");
 }
 #imagen15{
-    background-image: url("../img//background/7-9gens.png");
-}
-#imagen16{
-    background-image: url("../img/background/Buceoball.png");
-}
-#imagen17{
-    background-image: url("../img/background/Acopioball.png");
-}
-#imagen18{
-    background-image: url("../img/background/Ocasoball.png");
-}
-#imagen19{
-    background-image: url("../img/background/Velozball.png");
+    background-image: url("../img//background/7-9gens.webp");
 }
 
-.inicio-sesion{
+.gestionar-sesion{
     width: 10%;
     height: 50%;
     display: flex;
@@ -168,7 +218,7 @@ body{
     border-radius: 20%;
 }
 
-.inicio-sesion #boton-inicio-sesion{
+.gestionar-sesion .boton-inicio-sesion{
     font-size: 1vw;
     display: flex;
     flex-direction: row;
@@ -181,9 +231,13 @@ body{
     border-radius: 20%;
 }
 
-#boton-inicio-sesion:hover{
+.boton-inicio-sesion:hover{
     border: 2px solid yellow;
     transform: scale(1.07);
+}
+
+#boton-cerrar-sesion {
+    display: none;
 }
 
 /*###################### ENTORNO ###########################*/
@@ -216,8 +270,12 @@ body{
     display: flex;
     list-style: none;
     flex-direction: column;
-    gap: 2vw;
+    gap: 2vh;
     justify-content: center;
+}
+
+#megadex {
+    display: none;
 }
 
 .menu-botones ul li button{
@@ -256,12 +314,12 @@ body{
 
 .oak{
     background: transparent;
-    height: 40%;
+    width: 100%;
+    aspect-ratio: original;
 }
 
 .oak-contenido{
     width: 100%;
-    height: 93%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -274,8 +332,8 @@ body{
 }
 
 #oak-dentro{
-    width: 23.5%;
-    height: 70%;
+    width: 15%;
+    aspect-ratio: original;
 }
 
 .oak-contenido-imagen{
@@ -285,10 +343,11 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 5% 0 2% 0;
 }
 
 .oak-contenido-parrafo{
-    font-size: 0.9vw;
+    font-size: 0.7vw;
     width: 100%;
     height: fit-content;
     display: flex;
@@ -305,21 +364,34 @@ body{
     height: 98.5%;
     text-align: justify;
     padding: 1%;
+    background-color: #f0e9f1;
+}
+
+.divDialogo {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100000000;
 }
 
 .dialogo-oak{
-    padding: 0.5%;
+    width: 35%;
+    height: 17vw;
     position: absolute;
-    top: 53%;
-    display: none;
-    left: 65.5%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    background-image: url("../img/background/LaboratorioOak.png");
+    background-image: url("../img/background/LaboratorioOak.webp");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
-    width: 35%;
-    height: 35%;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 0.5%;
     overflow: hidden;
 }
 
@@ -375,7 +447,6 @@ body{
 .input-busqueda{
     width: 80%;
     height: 50%;
-    text-align: left;
     border: 3.5px solid black;
     border-radius: 7px;
     background-color: #8fe3fd;
@@ -469,7 +540,7 @@ body{
     width: 100%;
     border-top: 7px solid rgb(128, 0, 0);
     height: calc(10.3% - 7px);
-    background-image: url("../img/background/PokedexNoContenidoSuperior.jpg");
+    background-image: url("../img/background/PokedexNoContenidoSuperior.webp");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -487,16 +558,16 @@ body{
     align-items: center;
     vertical-align: middle;
     height: 100%;
-    margin-bottom: 1.5%;
-    font-family: 'Pokemon Solid', sans-serif;
-    font-size: var(--letraBotones);
+    font-size: 2vw;
+    font-weight: bold;
+    font-family:'Courier New', Courier, monospace;
     color: var(--colorTexto);
 }
 
 .contenido-visual{
     width: 100%;
     height: 85%;
-    background-image: url("../img/background/PokedexContenido.jpg");
+    background-image: url("../img/background/PokedexContenido.webp");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -507,7 +578,7 @@ body{
 .no-contenido-visual-inferior{
     width: 100%;
     height: 5%;
-    background-image: url("../img/background/PokedexNoContenidoInferior.jpg");
+    background-image: url("../img/background/PokedexNoContenidoInferior.webp");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -602,4 +673,49 @@ body{
     align-items: center;
     justify-content: center;
     background-color: var(--footer);
+}
+
+
+@media screen and ((max-width: 1200px) or (max-height: 800px)) {
+    #boton-juego {
+        display: none;
+    }
+}
+
+@media screen and (orientation:portrait) {
+    #rotar-dispositivo {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #e63032;
+        z-index: 100000000;
+    }
+
+    #imagen-rotar-dispositivo{
+        width: 70%;
+        aspect-ratio: original;
+    }
+
+    #imagen-rotar-dispositivo img {
+        width: 100%;
+        height: 100%;
+    }
+
+    #rotar-dispositivo label {
+        font-size: 8vw;
+        font-weight: bold;
+        color: var(--colorTexto);
+    }
+}
+
+@media screen and (orientation:landscape) {
+    #rotar-dispositivo {
+        display: none;
+    }
 }

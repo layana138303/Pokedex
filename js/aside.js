@@ -1,10 +1,11 @@
-const bodyElements = document.querySelectorAll('body > *');
 const disablingElements = document.querySelectorAll('button, select, input');
 const dialogoOak = document.querySelector(".dialogo-oak");
+const divDialogo = document.querySelector(".divDialogo");
 const botonDialogoOak = document.getElementById("boton-cerrar-dialogo");
 const textoDialogoOak = document.getElementById("texto-dialogo-oak");
-let contenedores = document.getElementsByTagName('div');
 const oak = document.getElementById("oak-clickable");
+
+oak.addEventListener("click", soloMostrarDialogoOak);
 
 function soloMostrarDialogoOak() {
     let frasesDialogoOak = [];
@@ -19,22 +20,11 @@ function soloMostrarDialogoOak() {
                 if (element != botonDialogoOak)
                     element.disabled = true;
             });
-            bodyElements.forEach(element => {
-                if (element == dialogoOak)
-                    return;
-                element.style.opacity = 0.4;
-            });
             
             busqueda.removeEventListener("click", mostrarContenidoElementoBusqueda);
         
-            if (contenido.style.width == "90%")
-                dialogoOak.style.left = "56%";
-            else {
-                dialogoOak.style.left = "65.5%";
-            }
-        
             oak.style.display = 'none';
-            dialogoOak.style.display = "block";
+            divDialogo.style.display = 'block';
             let numFrase = Math.floor(Math.random() * frasesDialogoOak.length);
             while (frasesDialogoOak[numFrase].includes(dialogoOak.innerHTML) && dialogoOak.innerHTML != "") {
                 numFrase = Math.floor(Math.random() * frasesDialogoOak.length);
@@ -56,16 +46,11 @@ botonDialogoOak.addEventListener("click", function(){
         if (element != botonDialogoOak)
             element.disabled = false;
     });
-    bodyElements.forEach(element => {
-        if (element == dialogoOak)
-            return;
-        element.style.opacity = 1;
-    });
 
     busqueda.addEventListener("click", mostrarContenidoElementoBusqueda);
 
     oak.style.display = 'block';
-    dialogoOak.style.display = "none";
+    divDialogo.style.display = "none";
     clearInterval(intervalo);
     textoDialogoOak.innerHTML = "";
 });

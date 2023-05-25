@@ -24,10 +24,13 @@ const shootArea = document.getElementById('shot-area')
 const superBulletsLimit = 10
 const bufferSuperBulletsLimit = 70
 
+// User
+const user = document.getElementById('input-username')
+
 // *** VARIABLES GLOBALES *** //
 
 // Logica
-var highScore = getLocalScore()
+var highScore = getLocalHighScore()
 var score = 0
 let gameOver = false
 
@@ -106,7 +109,7 @@ function checkGameOver() {
       audioGameOver.play()
       gameOver = true
       showGameOver()
-      updateLocalHighScore()
+      updateAllScores()
     }
   }
 }
@@ -138,21 +141,91 @@ function checkCollision(element1, element2) {
   return rect1.right > rect2.left && rect1.left < rect2.right && rect1.bottom > rect2.top && rect1.top < rect2.bottom
 }
 
-function getLocalScore() {
-  return localStorage.getItem('doctor-rush-score')
+function getLocalHighScore() {
+  return localStorage.getItem('doctor-rush-highscore')
 }
 
-function setLocalScore(score) {
-  localStorage.setItem('doctor-rush-score', score)
+function setLocalHighScore(score) {
+  localStorage.setItem('doctor-rush-highscore', score)
+}
+
+function getLocalUserScores() {
+  return JSON.parse(localStorage.getItem('doctor-rush-user-scores'))
+}
+
+function setLocalUserScores(scores) {
+  localStorage.setItem('doctor-rush-user-scores', JSON.stringify(scores))
+}
+
+function addLocalUserScore(user, score) {
+  const scores = getLocalUserScores()
+  scores.push({
+    user,
+    score
+  })
+  setLocalUserScores(scores)
+}
+
+function updateLocalUserScore(user, score) {
+  const scores = getLocalUserScores()
+  scores.forEach((el) => {
+    if (el.user === user) if (score > el.score) el.score = score
+  })
+  setLocalUserScores(scores)
 }
 
 function updateLocalHighScore() {
-  if (score > highScore) setLocalScore(score)
+  if (score > highScore) {
+    setLocalHighScore(score)
+    highScore = score
+  }
+}
+
+function updateScoreTable() {
+  const table = document.getElementById('score-table')
+  // Clear table
+  var rows = table.rows.length
+  for (let i = rows - 1; i > 0; i--) {
+    table.deleteRow(i)
+  }
+  // Update table
+  const scoresArray = getLocalUserScores()
+
+  scoresArray.sort((a, b) => b.score - a.score)
+  scoresArray?.forEach((score) => {
+    const user = score.user
+    const highscore = score.score
+    let row = document.createElement('tr')
+    row.innerHTML = `<td>${user}</td><td>${highscore}</td>`
+    table.appendChild(row)
+  })
+}
+
+function updateAllScores() {
+  let updated = false
+  const username = user.value //TODO: Get username from PHP session
+  if (username.length === 0) return
+  updateLocalHighScore()
+  const localScores = getLocalUserScores()
+  localScores.forEach((el) => {
+    if (el.user === username) {
+      updateLocalUserScore(username, score)
+      updated = true
+    }
+  })
+  updateScoreTable()
+  if (updated) return
+  addLocalUserScore(username, score)
 }
 
 function initHighScore() {
+  updateScoreTable()
   const highscorehtml = document.getElementById('high-score')
-  highscorehtml.innerHTML = getLocalScore() ?? 0
+  highscorehtml.innerText = getLocalHighScore() ?? 0
+  const userScores = getLocalUserScores()
+  if (!userScores) {
+    localStorage.setItem('doctor-rush-user-scores', '[]')
+  }
 }
 
 function updateScore(inc, newScore = score) {

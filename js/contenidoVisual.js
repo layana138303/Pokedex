@@ -3,6 +3,8 @@ const divContenidoRegiones = document.getElementById("div-contenido-visual-regio
 const divContenidoAtaques = document.getElementById("div-contenido-visual-ataques");
 const divContenidoTablaTipos = document.getElementById("div-contenido-visual-tabla-tipos");
 const divContenidoJuego = document.getElementById("div-contenido-visual-juego");
+const divUserScore = document.getElementById("div-user-score");
+var intervalos = [];
 
 /*############# POKEDEX ##############*/
 const imagenPokemon = document.getElementById("pokemon-imagen");
@@ -82,10 +84,10 @@ idioma.addEventListener("click", () => {
 
             let newLanguage;
             if (currentLanguage == "en") {
-                idioma.style.backgroundImage = "url('img/general/spanishLanguage.png')";        
+                idioma.style.backgroundImage = "url('img/general/spanishLanguage.webp')";        
                 newLanguage = 'es';
             } else {
-                idioma.style.backgroundImage = "url('img/general/englishLanguage.png')"; 
+                idioma.style.backgroundImage = "url('img/general/englishLanguage.webp')"; 
                 newLanguage = 'en';
             }
 
@@ -103,13 +105,17 @@ idioma.addEventListener("click", () => {
 
                 input.setAttribute('placeholder', translatedPlaceholder);
             });
-        });
+        })
+        .catch(error => console.error("Error al cambiar idioma"));
 });
 
 
 /*######################################*/
 
-let clickListeners = [];
+let imagenClickListeners = [];
+let regionClickListeners = [];
+let movimientosClickListeners = [];
+let pokemonsMovimientoClickListeners = [];
 
 function mostrarContenidoPokemon(pokemon){
     divContenidoPokedex.style.display = "block";
@@ -139,71 +145,59 @@ function mostrarContenidoPokemon(pokemon){
     let defensaEspecial = stats[4].base_stat;
     let velocidad = stats[5].base_stat;
 
+    loadScreen.style.display = "block";
 
     /*Movimientos de los pokemon*/
-
-    let moves = pokemon.moves;
-    let movimientosDelPokemon = [];
-    for (let i = 0; i < moves.length; i++) {
-        movimientosDelPokemon.push(moves[i].move.name);
+    obtenerMovimientos(pokemon);
+      
+    for (let i = 0; i < movimientosClickListeners.length; i++) {
+        const listener = movimientosClickListeners[i];
+        movimientosPokemon.removeEventListener("click", listener);
     }
 
-    movimientosPokemon.innerHTML = "";
-    const querySelectors = [
-        ".movimientograss",
-        ".movimientofire",
-        ".movimientowater",
-        ".movimientoelectric",
-        ".movimientoground",
-        ".movimientoflying",
-        ".movimientopsychic",
-        ".movimientobug",
-        ".movimientorock",
-        ".movimientoghost",
-        ".movimientodark",
-        ".movimientosteel",
-        ".movimientofairy",
-        ".movimientonormal",
-        ".movimientofighting",
-        ".movimientopoison",
-        ".movimientodragon",
-        ".movimientoice"
-      ];
-      
-    querySelectors.forEach((querySelector) => {
-        const divsMovimiento = divBusquedaAtaques.querySelectorAll(querySelector);
-        divsMovimiento.forEach((div) => {
-            if (movimientosDelPokemon.includes(div.getAttribute("name"))) {
-                movimientosPokemon.appendChild(div.cloneNode(true));
-            }
-        });
-    });
-      
-    movimientosPokemon.addEventListener("click", function (event) {
+    movimientosPokemon.addEventListener("click", buscarMovimientoPokemon);
+    movimientosClickListeners.push(buscarMovimientoPokemon);
+    
+    function buscarMovimientoPokemon (event) {
+        if (event.target.classList[0] === "div-moves-pokemon")
+            return;
+
         let movimientoMainListener = event.target.classList[0].split("-")[0];
         let movimientoSecondaryListener = "";
         if (event.target.classList[0].split("-").length > 1)
             movimientoSecondaryListener = event.target.classList[0].split("-")[1];
+
+        let movimientoInfo;
         if (movimientoMainListener.includes("movimiento")) {
-            const movimientoInfo = movimientos.get(event.target.getAttribute("name"));
-            mostrarContenidoAtaque(movimientoInfo);
+            movimientoInfo = event.target.getAttribute("name");
+            soloMostrarAtaques();
+            cargarDatosMovimientos();
+
+            fetch(`https://pokeapi.co/api/v2/move/${movimientoInfo}`).then(response => response.json()).then(movimiento => {
+                mostrarContenidoAtaque(movimiento);
+            });
         }
         if (movimientoSecondaryListener.length > 0 && movimientoSecondaryListener.includes("movimiento")) {
-            const movimientoInfo = movimientos.get(event.target.parentNode.getAttribute("name"));
-            mostrarContenidoAtaque(movimientoInfo);
+            movimientoInfo = event.target.parentNode.getAttribute("name");
+            soloMostrarAtaques();
+            cargarDatosMovimientos();
+
+            fetch(`https://pokeapi.co/api/v2/move/${movimientoInfo}`).then(response => response.json()).then(movimiento => {
+                mostrarContenidoAtaque(movimiento);
+            });
         }
-    });
+    }
 
 
     /*Stats e imagen de pokemon*/
 
-    for (let i = 0; i < clickListeners.length; i++) {
-        const listener = clickListeners[i];
+    for (let i = 0; i < imagenClickListeners.length; i++) {
+        const listener = imagenClickListeners[i];
         imagenPokemon.removeEventListener("click", listener);
     }
 
     imagenPokemon.addEventListener("click", cambiarImagenPokemon);
-    clickListeners.push(cambiarImagenPokemon);
+    imagenClickListeners.push(cambiarImagenPokemon);
 
     function cambiarImagenPokemon() {
         if (imagenPokemon.getAttribute("src") == imagenFrente) {
@@ -227,7 +221,11 @@ function mostrarContenidoPokemon(pokemon){
 
     imagenPokemon.setAttribute("src", imagenFrente);
 
-    idioma.addEventListener("click", () => {
+
+    idioma.addEventListener("click", cambioIdiomaInfoPokemon);
+    cambioIdiomaInfoPokemon();
+
+    function cambioIdiomaInfoPokemon() {
         fetch('json/traduccion.json')
             .then(response => response.json())
             .then(traduccion => {
@@ -261,43 +259,9 @@ function mostrarContenidoPokemon(pokemon){
                 ataqueEspecialPokemon.innerHTML += ataqueEspecial;
                 defensaEspecialPokemon.innerHTML += defensaEspecial;
                 velocidadPokemon.innerHTML += velocidad;
-            });
-    });
-
-    fetch('json/traduccion.json')
-        .then(response => response.json())
-        .then(traduccion => {
-            let idiomaActual = document.documentElement.lang;
-
-            let elementosCambioIdioma = document.querySelectorAll(".pokedex-cambio-idioma");
-            elementosCambioIdioma.forEach(elemento => {
-                elemento.textContent = traduccion[idiomaActual][elemento.id];
-            });
-
-            idPokemon.innerHTML += ("0000".slice(0, -(id.toString().length)) + id);
-            nombrePokemon.innerHTML += nombre;
-            alturaPokemon.innerHTML += (altura / 10).toFixed(2) + " m";
-            pesoPokemon.innerHTML += (peso / 10).toFixed(2) + " kg";
-            tipo1Pokemon.innerHTML = tipos[0].type.name;
-            tipo1Pokemon.setAttribute("class", "movimiento" + tipos[0].type.name);
-            if (tipos.length > 1) {
-                tipo2Pokemon.innerHTML = tipos[1].type.name;
-                tipo2Pokemon.setAttribute("class", "movimiento" + tipos[1].type.name);
-            } else {
-                tipo2Pokemon.innerHTML = "";
-                tipo2Pokemon.setAttribute("class", "sinmovimiento");
-            }
-            habilidad1Pokemon.innerHTML = habilidades[0].ability.name;
-            if (habilidades.length > 1) {
-                habilidad2Pokemon.innerHTML = habilidades[1].ability.name;
-            }
-            hpPokemon.innerHTML += hp;
-            ataquePokemon.innerHTML += ataque;
-            defensaPokemon.innerHTML += defensa;
-            ataqueEspecialPokemon.innerHTML += ataqueEspecial;
-            defensaEspecialPokemon.innerHTML += defensaEspecial;
-            velocidadPokemon.innerHTML += velocidad;
-        });
+            })
+            .catch(error => console.error("Error al cambiar idioma"));
+    }
 
 
     /*Localizaciones y evolucion pokemon*/
@@ -318,67 +282,88 @@ function mostrarContenidoPokemon(pokemon){
                 localizacionesPokemon.appendChild(divLocalizacion);
             });
         }
-    });
+    })
+    .catch(error => console.error("Error al obtener localizaciones pokemon"));
 
     let evoluciones = [];
-    fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(specie => specie.json()).then(specie => {
+    fetch(pokemon.species.url).then(specie => specie.json()).then(specie => {
         fetch(specie.evolution_chain.url).then(evolution => evolution.json()).then(evolution => {
             evoluciones = obtenerEvoluciones(evolution.chain);
-
-            /*Obtener información de las localizaciones donde se encuentra su prevolución*/
-            let prevolucion = pokemons.get(divBusquedaPokedex.getElementsByClassName(evoluciones[0]).item(0).getAttribute("name"));
-
-            if (localizaciones.length <= 0) {
-                localizacionesPokemon.appendChild(labelLocalizacionesPokemon);
-
-                let localizacionesPrevolucion = [];
-                fetch(prevolucion.location_area_encounters).then(location => location.json()).then(location => {
-                    for (let i = 0; i < location.length; i++) {
-                        localizacionesPrevolucion.push(location[i].location_area.name);
-                    }
-                    localizacionesPrevolucion.forEach(localizacion => {
-                        let divLocalizacion = document.createElement("div");
-                        divLocalizacion.setAttribute("class", "localizacion");
-                        divLocalizacion.setAttribute("name", localizacion);
-                        divLocalizacion.innerHTML = `<p class="nombre-localizacion">${localizacion}</p>`;
-                        localizacionesPokemon.appendChild(divLocalizacion);
-                    });
+            
+            const fetchPromises = evoluciones.map(async (evolution) => {
+                try {
+                    const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${evolution}`);
+                    return await pokemon.json();
+                } catch (error) {
+                    return console.error("Error al obtener evoluciones pokemon");
+                }
                 });
-            }
+              
+            Promise.all(fetchPromises)
+                .then((pokemons) => {
+                    let infoEvoluciones = pokemons;
 
-            /*Obtener cadena evolutiva*/
-            let pokemonsCadenaEvolutiva = [];
-            if (prevolucion.name == "eevee") {
-                for (let i = 0; i < evoluciones.length; i++) {
-                    if (evoluciones[i] == 133 || evoluciones[i] == id) {
-                        pokemonsCadenaEvolutiva.push(pokemons.get(divBusquedaPokedex.getElementsByClassName(evoluciones[i]).item(0).getAttribute("name")));
+                    if (nombre.includes("gmax")) {
+                        obtenerMovimientos(infoEvoluciones[infoEvoluciones.length - 1]);
                     }
+        
+                    /*Obtener información de las localizaciones donde se encuentra su prevolución*/
+                    let pokemonsCadenaEvolutiva = [];
+                    obtenerLocalizacionesPrevolucion(infoEvoluciones[0]);
+        
+                    /*Obtener cadena evolutiva*/
+                    if (nombre.includes("mega") || nombre.includes("gmax")) {
+                        if (infoEvoluciones[0].name == "eevee") {
+                            pokemonsCadenaEvolutiva.push(infoEvoluciones[0]);
+                            pokemonsCadenaEvolutiva.push(pokemon);
+                        }
+                        else {
+                            pokemonsCadenaEvolutiva.push(infoEvoluciones[infoEvoluciones.length - 1]);
+                            pokemonsCadenaEvolutiva.push(pokemon);
+                        }
+                    }
+                    else {
+                        if (infoEvoluciones[0].name == "eevee") {
+                            for (let i = 0; i < evoluciones.length; i++) {
+                                if (evoluciones[i] == 133 || evoluciones[i] == id) {
+                                    pokemonsCadenaEvolutiva.push(infoEvoluciones[i]);
+                                }
+                            }
+                        }
+                        else {
+                            for (let i = 0; i < evoluciones.length; i++) {
+                                pokemonsCadenaEvolutiva.push(infoEvoluciones[i]);
+                            }
+                        }
+                    }
+                    mostrarEvoluciones(pokemonsCadenaEvolutiva);
+                    loadScreen.style.display = 'none';
+                })
+                .catch(error => console.error("Error al obtener evoluciones pokemon"));
+        })
+        .catch(error => console.error("Error al obtener cadena evolutiva"));
+    })
+    .catch(error => console.error("Error al obtener especie"));
+
+    function obtenerLocalizacionesPrevolucion(prevolucion) {
+        if (localizaciones.length <= 0) {
+            localizacionesPokemon.appendChild(labelLocalizacionesPokemon);
+
+            let localizacionesPrevolucion = [];
+            fetch(prevolucion.location_area_encounters).then(location => location.json()).then(location => {
+                for (let i = 0; i < location.length; i++) {
+                    localizacionesPrevolucion.push(location[i].location_area.name);
                 }
-            }
-            else {
-                for (let i = 0; i < evoluciones.length; i++) {
-                    pokemonsCadenaEvolutiva.push(pokemons.get(divBusquedaPokedex.getElementsByClassName(evoluciones[i]).item(0).getAttribute("name")));
-                }
-            }
-            evolucionesPokemon.innerHTML = "";
-            evolucionesPokemon.appendChild(labelEvolucionesPokemon);
-            let longitudCadenaEvolutiva = pokemonsCadenaEvolutiva.length > 3 ? 3 : pokemonsCadenaEvolutiva.length;
-            for (let i = 0; i < longitudCadenaEvolutiva; i++) {
-                let pokemon = pokemonsCadenaEvolutiva[i];
-                let divEvolucion = document.createElement("div");
-                divEvolucion.setAttribute("class", "evolucion");
-                divEvolucion.setAttribute("name", "evoluciones" + pokemon.name);
-                divEvolucion.innerHTML = `<img src="${pokemon.sprites.front_default}" class="imagen-evolucion" alt="Imagen evolucion de ${pokemon.name}">`;
-                evolucionesPokemon.appendChild(divEvolucion);
-                if (i < (longitudCadenaEvolutiva - 1 < 2 ? longitudCadenaEvolutiva - 1 : 2)) {
-                    let divFlecha = document.createElement("div");
-                    divFlecha.setAttribute("class", "flecha-evolucion");
-                    divFlecha.innerHTML = `<img src="img/general/flecha.png" class="flecha" alt="Flecha evolucion">`;
-                    evolucionesPokemon.appendChild(divFlecha);
-                }
-            }
-        });
-    });
+                localizacionesPrevolucion.forEach(localizacion => {
+                    let divLocalizacion = document.createElement("div");
+                    divLocalizacion.setAttribute("class", "localizacion");
+                    divLocalizacion.setAttribute("name", localizacion);
+                    divLocalizacion.innerHTML = `<p class="nombre-localizacion">${localizacion}</p>`;
+                    localizacionesPokemon.appendChild(divLocalizacion);
+                });
+            });
+        }
+    }
 
     function obtenerEvoluciones(evolution_chain){
         let evoluciones = [];
@@ -396,39 +381,104 @@ function mostrarContenidoPokemon(pokemon){
         }
         return evoluciones;
     }
+    
+    function mostrarEvoluciones(pokemonsCadenaEvolutiva) {
+        evolucionesPokemon.innerHTML = "";
+        evolucionesPokemon.appendChild(labelEvolucionesPokemon);
+        let longitudCadenaEvolutiva = pokemonsCadenaEvolutiva.length > 3 ? 3 : pokemonsCadenaEvolutiva.length;
+        for (let i = 0; i < longitudCadenaEvolutiva; i++) {
+            let pokemon = pokemonsCadenaEvolutiva[i];
+            let divEvolucion = document.createElement("div");
+            divEvolucion.setAttribute("class", "evolucion");
+            divEvolucion.setAttribute("name", "evoluciones" + pokemon.name);
+            divEvolucion.innerHTML = `<img src="${pokemon.sprites.front_default}" class="imagen-evolucion" alt="Imagen evolucion de ${pokemon.name}">`;
+            evolucionesPokemon.appendChild(divEvolucion);
+            if (i < (longitudCadenaEvolutiva - 1 < 2 ? longitudCadenaEvolutiva - 1 : 2)) {
+                let divFlecha = document.createElement("div");
+                divFlecha.setAttribute("class", "flecha-evolucion");
+                divFlecha.innerHTML = `<img src="img/general/flecha.webp" class="flecha" alt="Flecha evolucion">`;
+                evolucionesPokemon.appendChild(divFlecha);
+            }
+        }
+    }
 
-    localizacionesPokemon.addEventListener("click", function (event) {
+    function obtenerMovimientos(pokemon) {
+        let moves = pokemon.moves;
+        let movimientosDelPokemon = [];
+        for (let i = 0; i < moves.length; i++) {
+            movimientosDelPokemon.push(moves[i].move);
+        }
+
+        movimientosPokemon.innerHTML = "";
+        
+        movimientosDelPokemon.forEach((move) => {
+            fetch(move.url).then(movimiento => movimiento.json()).then(movimiento => {
+                let nombre = movimiento.name;
+                let tipo = movimiento.type.name;
+                let imagen = "img/general/" + movimiento.damage_class.name + "Attack.webp";
+                if ((nombre != "pound" || move.id == 1) && movimiento.learned_by_pokemon.length > 0) {
+                    let divMovimiento = document.createElement("div");
+                    divMovimiento.setAttribute("class", "movimiento"+tipo);
+                    divMovimiento.setAttribute("name", nombre);
+                    divMovimiento.setAttribute("tabindex", move.id-1);
+                    let claseTipo = `tipo-movimiento-${tipo.toLowerCase()}`;
+                    divMovimiento.innerHTML = `<img src="${imagen}" class="mini-movimiento" alt="${nombre}">
+                                                <p class="nombre-movimiento">${nombre}</p>
+                                                <p class="${claseTipo}">${tipo.substring(0, 3)}</p>`;
+                    movimientosPokemon.appendChild(divMovimiento);
+                }
+            })
+            .catch(error => console.error("Movimiento no encontrado"));
+        });
+    }
+
+    for (let i = 0; i < regionClickListeners.length; i++) {
+        const listener = regionClickListeners[i];
+        localizacionesPokemon.removeEventListener("click", listener);
+    }
+
+    localizacionesPokemon.addEventListener("click", buscarRegionLocalizacionPokemon);
+    regionClickListeners.push(buscarRegionLocalizacionPokemon);
+    
+    function buscarRegionLocalizacionPokemon (event) {
+        if (event.target.classList[0] === "div-location-pokemon")
+            return;
+
         let localizacionMainListener = event.target.classList[0].split("-")[0];
         let localizacionSecondaryListener = "";
         if (event.target.classList[0].split("-").length > 1)
-        localizacionSecondaryListener = event.target.classList[0].split("-")[1];
+            localizacionSecondaryListener = event.target.classList[0].split("-")[1];
+
+        let nombreLocalizacion;
         if (localizacionMainListener.includes("localizacion")) {
-            let nombreLocalizacion = event.target.getAttribute("name");
-            
-            for (const region of regiones.values()) {
-                region.locations.forEach(localizacion => {
-                    if (nombreLocalizacion.includes(localizacion.name)) {
-                        mostrarContenidoRegion(region);
-                    }
-                });
-            }
+            nombreLocalizacion = event.target.getAttribute("name");
         }
         if (localizacionSecondaryListener.length > 0 && localizacionSecondaryListener.includes("localizacion")) {
-            let nombreLocalizacion = event.target.parentNode.getAttribute("name");
-
-            for (const region of regiones.values()) {
+            nombreLocalizacion = event.target.parentNode.getAttribute("name");
+        }
+        let regionEncontrada = false;
+        
+        for (i = 1; i <= 8; i++) {
+            fetch(`https://pokeapi.co/api/v2/region/${i}`).then(regiones => regiones.json()).then(region => {
                 region.locations.forEach(localizacion => {
                     if (nombreLocalizacion.includes(localizacion.name)) {
+                        soloMostrarRegiones();
+                        cargarDatosRegiones();
+
                         mostrarContenidoRegion(region);
+
+                        regionEncontrada = true;
+                        return;
                     }
                 });
-            }
+            })
+            .catch(error => console.error("Region no encontrada"))
+
+            if (regionEncontrada)
+                break;
         }
-    });
-
+    }
 }
-
-let intervalos = [];
 
 function mostrarContenidoRegion(region){
     divContenidoPokedex.style.display = "none";
@@ -439,7 +489,7 @@ function mostrarContenidoRegion(region){
 
     let nombre = region.name;
 
-    mapaRegion.style.backgroundImage = `url("img/regiones/${nombre}.png")`;
+    mapaRegion.style.backgroundImage = `url("img/regiones/${nombre}.webp")`;
     
     if (nombre == "kanto")
         parrafoRegion.style.fontSize = '0.9vw';
@@ -465,8 +515,8 @@ function mostrarContenidoRegion(region){
         contenidoRegiones.insertBefore(mapaRegion, parrafoRegion);
     }
 
-    personajeRegion1.setAttribute("src", `img/personajes/${nombre}Prota1.png`);
-    personajeRegion2.setAttribute("src", `img/personajes/${nombre}Prota2.png`);
+    personajeRegion1.setAttribute("src", `img/personajes/${nombre}Prota1.webp`);
+    personajeRegion2.setAttribute("src", `img/personajes/${nombre}Prota2.webp`);
 
     let localizaciones = [];
     region.locations.forEach(location => {
@@ -484,19 +534,34 @@ function mostrarContenidoRegion(region){
 
     for (let i = 0; i < intervalos.length; i++) {
         clearInterval(intervalos[i]);
+        intervalos.splice(i, 1);
     }
 
     idioma.addEventListener("click", () => {
+        cambioIdiomaParrafoRegion(true);
+    });
+    let numFrase = 0;
+    cambioIdiomaParrafoRegion(false);
+
+    function cambioIdiomaParrafoRegion(cambioIdioma) {
+        parrafoRegion.innerHTML = "";
         fetch('json/frases.json')
             .then(response => response.json())
             .then(frases => {
                 let idiomaActual = document.documentElement.lang;
                 let frasesRegion = frases[idiomaActual][nombre];
 
-                for (let i = 0; i < intervalos.length; i++) {
-                    clearInterval(intervalos[i]);
+                if (cambioIdioma) {
+                    for (let i = 0; i < intervalos.length; i++) {
+                        clearInterval(intervalos[i]);
+                    }
                 }
-                parrafoRegion.innerHTML = "";
+                else {
+                    numFrase = Math.floor(Math.random() * frasesRegion.length);
+                    while (frasesRegion[numFrase].includes(mapaRegion.innerHTML) && mapaRegion.innerHTML != "") {
+                        numFrase = Math.floor(Math.random() * frasesRegion.length);
+                    }
+                }
 
                 let x = 0;
                 function escribirTexto() {
@@ -508,35 +573,9 @@ function mostrarContenidoRegion(region){
                 intervaloParrafoRegiones = setInterval(escribirTexto, 20);
                 intervalos.push(intervaloParrafoRegiones);
             })
-            .catch(error => console.error(error));
-    });
-
-    let numFrase = 0;
-
-    parrafoRegion.innerHTML = "";
-    fetch('json/frases.json')
-        .then(response => response.json())
-        .then(frases => {
-            let idiomaActual = document.documentElement.lang;
-
-            let frasesRegion = frases[idiomaActual][nombre];
-            numFrase = Math.floor(Math.random() * frasesRegion.length);
-            while (frasesRegion[numFrase].includes(mapaRegion.innerHTML) && mapaRegion.innerHTML != "") {
-                numFrase = Math.floor(Math.random() * frasesRegion.length);
-            }
-            let x = 0;
-            function escribirTexto() {
-                parrafoRegion.innerHTML = `<p>${frasesRegion[numFrase].substring(0, x)}</p>`;
-                x++;
-                if (x > frasesRegion[numFrase].length)
-                    clearInterval(intervaloParrafoRegiones);
-            }
-            intervaloParrafoRegiones = setInterval(escribirTexto, 20);
-            intervalos.push(intervaloParrafoRegiones);
-        })
-        .catch(error => console.error(error));
+            .catch(error => console.error("Error al obtener las frases"));
+    }
 }
-
 
 function mostrarContenidoAtaque(ataque){
     divContenidoPokedex.style.display = "none";
@@ -556,38 +595,123 @@ function mostrarContenidoAtaque(ataque){
     let learned_by_pokemon = ataque.learned_by_pokemon;
     let pokemonsUsanAtaque = [];
     for (let i = 0; i < learned_by_pokemon.length; i++) {
-        pokemonsUsanAtaque.push(learned_by_pokemon[i].name);
+        pokemonsUsanAtaque.push(learned_by_pokemon[i].url);
     }
 
     pokemonUsanMovimiento.innerHTML = "";
 
-    const divsPokemon = divBusquedaPokedex.querySelectorAll('.pokemon');
-    divsPokemon.forEach(div => {
-        if (pokemonsUsanAtaque.includes(div.getAttribute("name"))) {
-            let nuevoDiv = div.cloneNode(true);
-            nuevoDiv.setAttribute("class", "pokemon-usa-ataque");
-            nuevoDiv.setAttribute("name", div.getAttribute("name")+"-usa-"+nombre);
-            nuevoDiv.querySelector(".mini-pokemon").setAttribute("class", "imagen-pokemon-usa-ataque");
-            pokemonUsanMovimiento.appendChild(nuevoDiv);
-        }
-    });
+    loadScreen.style.display = "block";
 
-    pokemonUsanMovimiento.addEventListener("click", function (event) {
+    (async () => {
+        let divs = [];
+        let fetchPromises = [];
+
+        for (let i = 0; i < pokemonsUsanAtaque.length; i++) {
+            const fetchPromise = fetch(
+                pokemonsUsanAtaque[i],
+                { timeout: 5000 }
+            )
+            .then((response) => response.json())
+            .then((pokemon) => {
+                let id = pokemon.id;
+                let nombre = pokemon.name;
+
+                if ((id > 10000 && ((!nombre.includes("mega") && !nombre.includes("gmax")) || botonMegadex.style.display != 'block')) || (id > 905 && id < 1011)) {
+                    return;
+                }
+
+                let divPokemon = document.createElement("div");
+                let tipo1 = pokemon.types[0].type.name;
+                let tipo2 = "";
+                if (pokemon.types.length > 1)
+                    tipo2 = pokemon.types[1].type.name;
+                if (id > 10000) {
+                    divPokemon.setAttribute("class", "pokemon mega " + id + " " + tipo1 + " " + tipo2);
+                    divPokemon.innerHTML = `<img src="${pokemon.sprites.front_default} "class="mini-megapokemon" alt="${nombre}">` +
+                                            `<p class="id-megapokemon">#${("0000".slice(0, -(id.toString().length)) + id)}</p>` +
+                                            `<p class="nombre-megapokemon">${nombre}</p>`;
+                }
+                else {
+                    divPokemon.setAttribute("class", "pokemon " + id + " " + tipo1 + " " + tipo2);
+                    divPokemon.innerHTML = `<img src="${pokemon.sprites.front_default} "class="mini-pokemon" alt="${nombre}">` +
+                                            `<p class="id-pokemon">#${("0000".slice(0, -(id.toString().length)) + id)}</p>` +
+                                            `<p class="nombre-pokemon">${nombre}</p>`;
+                }
+                divPokemon.setAttribute("name", nombre);
+                divPokemon.setAttribute("tabindex", i-1);
+                
+                divs[i] = divPokemon;
+            })
+            .catch(error => {
+                    if (error.name === 'AbortError') {
+                        console.error("Error al obtener los datos del Pokemon ", i);
+                    } else {
+                        console.error("Error al obtener los datos del Pokemon ", i);
+                }                    
+                throw error;
+            });
+
+            fetchPromises.push(fetchPromise);
+        }
+
+        try {
+            await Promise.all(fetchPromises);
+        } catch (error) {}
+
+        for (let i = 0; i < divs.length; i++) {
+            if (divs[i] != undefined)
+                pokemonUsanMovimiento.appendChild(divs[i]);
+        }
+
+        loadScreen.style.display = 'none';
+    })();
+
+
+    for (let i = 0; i < pokemonsMovimientoClickListeners.length; i++) {
+        const listener = pokemonsMovimientoClickListeners[i];
+        pokemonUsanMovimiento.removeEventListener("click", listener);
+    }
+
+    pokemonUsanMovimiento.addEventListener("click", buscarPokemonsUsanMovimiento);
+    pokemonsMovimientoClickListeners.push(buscarPokemonsUsanMovimiento);
+    
+    function buscarPokemonsUsanMovimiento (event) {
+        if (event.target.classList[0] === "div-pokemon-use-move")
+            return;
+
         let pokemonMainListener = event.target.classList[0].split("-")[0];
         let pokemonSecondaryListener = "";
         if (event.target.classList[0].split("-").length > 1)
             pokemonSecondaryListener = event.target.classList[0].split("-")[1];
+
+        let pokemonName;
         if (pokemonMainListener.includes("pokemon")) {
-            const pokemonName = event.target.getAttribute("name").split("-")[0];
-            mostrarContenidoPokemon(pokemons.get(pokemonName));
+            pokemonName = event.target.getAttribute("name");
         }
         if (pokemonSecondaryListener.length > 0 && pokemonSecondaryListener.includes("pokemon")){
-            const pokemonName = event.target.parentNode.getAttribute("name").split("-")[0];
-            mostrarContenidoPokemon(pokemons.get(pokemonName));
+            pokemonName = event.target.parentNode.getAttribute("name");
         }
-    });
+        
+        if ((pokemonName.includes("mega") || pokemonName.includes("gmax")) && (botonMegadex.style.display == "block")) {
+            soloMostrarPokedex(true);
+            cargarDatosMegaPokemon();
+        }
+        else {
+            soloMostrarPokedex(false);
+            cargarDatosPokemon();
+        }
+
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`).then((response) => response.json()).then((pokemon) => {
+            mostrarContenidoPokemon(pokemon);
+        });
+    }
 
     idioma.addEventListener("click", () => {
+        cambioIdiomaInfoAtaque(true);
+    });
+    cambioIdiomaInfoAtaque(false);
+
+    function cambioIdiomaInfoAtaque(cambioIdioma) {
         fetch('json/traduccion.json')
             .then(response => response.json())
             .then(traduccion => {
@@ -598,6 +722,15 @@ function mostrarContenidoAtaque(ataque){
                     elemento.textContent = traduccion[idiomaActual][elemento.id];
                 });
 
+                if (!cambioIdioma) {
+                    tipoMovimiento.setAttribute("class", "movimiento" + tipo + " ataques-cambio-idioma");
+                    tipoMovimientoInfoGeneral.setAttribute("class", "movimiento" + tipo);
+                    nombreMovimientoInfoGeneral.innerHTML = nombre;
+                    tipoMovimientoInfoGeneral.innerHTML = tipo;
+                    ppMovimientoInfoGeneral.innerHTML = "PP: " + pp + "/" + pp;
+                    imagenCategoriaMovimiento.setAttribute("src", "img/general/" + categoria + "Attack.webp");
+                }
+
                 nombreMovimiento.innerHTML += nombre;
                 categoriaMovimiento.innerHTML += categoria;
                 tipoMovimiento.innerHTML += tipo;
@@ -605,35 +738,9 @@ function mostrarContenidoAtaque(ataque){
                 precisionMovimiento.innerHTML += precision;
                 ppMovimiento.innerHTML += pp;
                 prioridadMovimiento.innerHTML += prioridad;
-            });
-    });
-
-    fetch('json/traduccion.json')
-        .then(response => response.json())
-        .then(traduccion => {
-            let idiomaActual = document.documentElement.lang;
-
-            let elementosCambioIdioma = document.querySelectorAll(".ataques-cambio-idioma");
-            elementosCambioIdioma.forEach(elemento => {
-                elemento.textContent = traduccion[idiomaActual][elemento.id];
-            });
-
-            tipoMovimiento.setAttribute("class", "movimiento" + tipo + " ataques-cambio-idioma");
-            tipoMovimientoInfoGeneral.setAttribute("class", "movimiento" + tipo);
-
-            nombreMovimientoInfoGeneral.innerHTML = nombre;
-            tipoMovimientoInfoGeneral.innerHTML = tipo;
-            ppMovimientoInfoGeneral.innerHTML = "PP: " + pp + "/" + pp;
-
-            nombreMovimiento.innerHTML += nombre;
-            categoriaMovimiento.innerHTML += categoria;
-            imagenCategoriaMovimiento.setAttribute("src", "img/general/" + categoria + "Attack.png");
-            tipoMovimiento.innerHTML += tipo;
-            potenciaMovimiento.innerHTML += potencia;
-            precisionMovimiento.innerHTML += precision;
-            ppMovimiento.innerHTML += pp;
-            prioridadMovimiento.innerHTML += prioridad;
-        });    
+            })
+            .catch(error => console.error("Error al cambiar de idioma"));
+    }
 }
 
 function mostrarContenidoTablaTipos(){
@@ -650,48 +757,23 @@ function mostrarContenidoTablaTipos(){
                 let tipoSeleccionado = selectorTipos.value;
                 let tipo = tipos[tipoSeleccionado];
                 let nombre = tipo["name"];
+
+                idioma.addEventListener("click", () => {
+                    cambioIdiomaTablaTipos(tipo);
+                });
+
+                cambioIdiomaTablaTipos(tipo);
+        
+                divSeleccionTipo.setAttribute("class", "seleccion-tipo movimiento" + nombre.toLowerCase());
+                labelSelectorTipos.setAttribute("class", "select-a-type movimiento" + nombre.toLowerCase() + " cambio-idioma");
+
+            });
+
+            function cambioIdiomaTablaTipos(tipo) {
+                let nombre = tipo["name"];
                 let inmunidades = tipo["immunes"];
                 let debilidades = tipo["weaknesses"];
                 let efectividades = tipo["effectiveness"];
-
-                idioma.addEventListener("click", () => {
-                    fetch('json/traduccion.json')
-                        .then(response => response.json())
-                        .then(traduccion => {
-                            let idiomaActual = document.documentElement.lang;
-
-                            let elementosCambioIdioma = document.querySelectorAll(".tabla-tipos-cambio-idioma");
-                            elementosCambioIdioma.forEach(elemento => {
-                                elemento.textContent = traduccion[idiomaActual][elemento.id];
-                            });
-
-                            nombreTipo.innerHTML += nombre;
-
-                            inmunidadesTipo.innerHTML = traduccion[idiomaActual][inmunidadesTipo.id];
-                            debilidadesTipo.innerHTML = traduccion[idiomaActual][debilidadesTipo.id];
-                            efectividadesTipo.innerHTML = traduccion[idiomaActual][efectividadesTipo.id];
-                            
-                            inmunidades.forEach(inmunidad => {
-                                let li = document.createElement("li");
-                                li.innerHTML = inmunidad;
-                                li.setAttribute("class", "movimiento" + inmunidad.toLowerCase());
-                                inmunidadesTipo.appendChild(li);
-                            });
-                            debilidades.forEach(debilidad => {
-                                let li = document.createElement("li");
-                                li.innerHTML = debilidad;
-                                li.setAttribute("class", "movimiento" + debilidad.toLowerCase());
-                                debilidadesTipo.appendChild(li);
-                            });
-                            efectividades.forEach(efectividad => {
-                                let li = document.createElement("li");
-                                li.innerHTML = efectividad;
-                                li.setAttribute("class", "movimiento" + efectividad.toLowerCase());
-                                efectividadesTipo.appendChild(li);
-                            });
-                        });
-                });
-
                 fetch('json/traduccion.json')
                     .then(response => response.json())
                     .then(traduccion => {
@@ -726,13 +808,11 @@ function mostrarContenidoTablaTipos(){
                             li.setAttribute("class", "movimiento" + efectividad.toLowerCase());
                             efectividadesTipo.appendChild(li);
                         });
-        
-                        divSeleccionTipo.setAttribute("class", "seleccion-tipo movimiento" + nombre.toLowerCase());
-                        labelSelectorTipos.setAttribute("class", "select-a-type movimiento" + nombre.toLowerCase() + " cambio-idioma");
-                    });
-            });
+                    })
+                    .catch(error => console.error("Error al cambiar de idioma"));
+            }
         })
-        .catch(error => console.error(error))
+        .catch(error => console.error("Error al cargar la info de la tabla de tipos del tipo especificado"))
 }
 
 function mostrarContenidoJuego(){
@@ -741,5 +821,6 @@ function mostrarContenidoJuego(){
     divContenidoAtaques.style.display = "none";
     divContenidoTablaTipos.style.display = "none";
     divContenidoJuego.style.display = "flex";
+    divUserScore.style.display = 'block'
     initializeGame();
 }

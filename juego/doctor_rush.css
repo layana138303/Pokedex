@@ -31,14 +31,17 @@
     background-repeat: no-repeat;
     background-color: black;
     overflow: hidden;
+    position: relative;
 }
 
 #interface {
-    width: var(--width-game);
-    height: var(--height-game);
+    width: 100%;
+    height: 100%;
     z-index: 1;
-    position: absolute;
     display: flex;
+    position: absolute;
+    max-width: var(--width-game);
+    max-height: var(--height-game);
 }
 
 #game-over {

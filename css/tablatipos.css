@@ -1,9 +1,9 @@
 * {
-    cursor: url("../img/general/cursor.png") 5 28, auto;
+    cursor: url("../img/general/cursor.webp") 5 28, auto;
 }
 
 .div-imagen-tabla-tipos {
-    background-image: url("../img/background/tablaTipos.jpg");
+    background-image: url("../img/background/tablaTipos.webp");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 100% 100%;
@@ -19,7 +19,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    margin-top: 10%;
+    margin-top: 3%;
     gap: 2%;
 }
 
@@ -46,11 +46,12 @@
 
 .seleccion-tipo {
     width: 80%;
+    height: 28.5%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    gap: 5%;
+    gap: 2%;
     border: 2px solid black;
     border-radius: 10px;
     padding: 1%;
@@ -64,11 +65,13 @@
 
 .select-tipos {
     width: 50%;
+    height: 90%;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 0.8vw;
     text-align: center;
 }
+
 
 .tabla-tipos-info-nombre {
     font-size: 1vw;
